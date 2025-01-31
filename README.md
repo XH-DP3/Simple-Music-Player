@@ -2,9 +2,9 @@
 
 ## Feel the music, Feel the Rhythm
 
-A *bulleted* list:
-- item 1
-- item 2
-- item 3
+About this game:
+- **Challenge your reaction:**
+- **Different levels of difficulty:** 
+- **Generate game for your favorite music:**  
 
 An example of text with **bold** and *italic* fonts.  
