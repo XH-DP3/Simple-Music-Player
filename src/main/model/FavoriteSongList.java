@@ -4,6 +4,3 @@ package model;
 public class FavoriteSongList extends SongList {
     
 }
-
-// make a melody clss
-//

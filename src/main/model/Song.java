@@ -77,4 +77,9 @@ public class Song {
     public void pauseSong() {
         // stub
     }
+
+    // EFFECTS: marked this song as favorite. 
+    public void markedAsFavorite() {
+        // stub
+    }
 }
