@@ -63,7 +63,7 @@ public class SongList {
     // REQUIRES: (index >= 0 && index < getSize()) && (!songList.contains(mySong))
     // MODIFIES: this
     // EFFECT: add mySong at the specific index to the song list and return true
-    protected boolean addSong(int index, Song mySong) {
+    public boolean addSong(int index, Song mySong) {
         if ((checkValidIndex(index)) && (!isContained(mySong.getTitle()))) {
             songList.add(index, mySong);
             return true;
@@ -74,7 +74,7 @@ public class SongList {
     // REQUIRES: !songList.contains(mySong)
     // MODIFIES: this
     // EFFECT: add mySong to the end of the list and return true;
-    protected boolean addSong(Song mySong) {
+    public boolean addSong(Song mySong) {
         if (!isContained(mySong.getTitle())) {
             return songList.add(mySong);
         }
