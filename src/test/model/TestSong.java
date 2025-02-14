@@ -55,7 +55,7 @@ public class TestSong {
         File f = new File("src/test/model/TestReadEmptyLyrics.txt");
         try {
             mySong.readLyrics(f);
-        assertEquals(0, mySong.getLyrics().size());
+            assertEquals(0, mySong.getLyrics().size());
         } catch (FileNotFoundException e) {
             fail("Got FileNotFoundException when we shouldn't have!");
         } catch (IOException e) {
@@ -68,11 +68,11 @@ public class TestSong {
         File f = new File("src/test/model/Unknown.txt");
         try {
             mySong.readLyrics(f);
-            fail ("Got no exception when we should have FileNotFoundException");
+            fail("Got no exception when we should have FileNotFoundException");
         } catch (FileNotFoundException e) {
             // expecting FileNotFoundException to be catught
-        } catch (IOException e) {  
-            fail ("Got IOException when we shoudn't have!");
+        } catch (IOException e) {
+            fail("Got IOException when we shoudn't have!");
         }
     }
 
@@ -83,7 +83,7 @@ public class TestSong {
             mySong.readLyrics(f);
             assertEquals(6, mySong.getLyrics().size());
         } catch (FileNotFoundException e) {
-            fail ("Got FileNotFoundException when we shouldn't have!");
+            fail("Got FileNotFoundException when we shouldn't have!");
         } catch (IOException e) {
             fail("Got IOException when we shouldn't have!");
         }

@@ -68,11 +68,11 @@ public class Song {
             throw new FileNotFoundException();
         }
         BufferedReader in = new BufferedReader(new FileReader(lyricsFile));
-            String s;
-            while ((s = in.readLine()) != null) {
-                lyrics.add(s);
-            }
-            in.close();
+        String s;
+        while ((s = in.readLine()) != null) {
+            lyrics.add(s);
+        }
+        in.close();
     }
 
     // EFFECTS: return the lyrics as a list. If the list is empty, return null.

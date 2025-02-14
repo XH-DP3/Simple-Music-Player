@@ -8,49 +8,49 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestFavotiteSongList {
-    
-    private FavoriteSongList FSL;
+
+    private FavoriteSongList fsl;
     private Song s1;
     private Song s2;
     private Song s3;
 
     @Before
     public void setup() {
-        FSL = new FavoriteSongList();
+        fsl = new FavoriteSongList();
         s1 = new Song("Payphone", "Maroon 5", "Pop", 231);
         s2 = new Song("Everybody Hurts", "Avril Lavigne", "Pop", 221);
         s3 = new Song("Innocence", "Avril Lavigne", "Pop", 233);
     }
 
     @Test
-    public void testAddNotFavoriteSongWithIndex(){
+    public void testAddNotFavoriteSongWithIndex() {
         assertFalse(s1.isFavorite());
-        assertFalse(FSL.addSong(1, s1));
+        assertFalse(fsl.addSong(1, s1));
     }
 
     @Test
     public void testAddFavoriteSongWithIndex() {
         s1.markedAsFavorite();
         s2.markedAsFavorite();
-        assertTrue(FSL.addSong(0, s1));
-        assertTrue(FSL.addSong(0, s2));
-        assertEquals(s2,FSL.getSongList().get(0));
-        assertEquals(s1,FSL.getSongList().get(1));
+        assertTrue(fsl.addSong(s1));
+        assertTrue(fsl.addSong(0, s2));
+        assertEquals(s2, fsl.getSongList().get(0));
+        assertEquals(s1, fsl.getSongList().get(1));
     }
 
     @Test
-    public void testAddNotFavoriteSongWithNoIndex(){
+    public void testAddNotFavoriteSongWithNoIndex() {
         assertFalse(s1.isFavorite());
-        assertFalse(FSL.addSong(0, s1));
+        assertFalse(fsl.addSong(0, s1));
     }
 
     @Test
     public void testAddFavoriteSongWithNoIndex() {
         s1.markedAsFavorite();
         s2.markedAsFavorite();
-        assertTrue(FSL.addSong(s1));
-        assertTrue(FSL.addSong(s2));
-        assertEquals(s1,FSL.getSongList().get(0));
-        assertEquals(s2,FSL.getSongList().get(1));
+        assertTrue(fsl.addSong(s1));
+        assertTrue(fsl.addSong(s2));
+        assertEquals(s1, fsl.getSongList().get(0));
+        assertEquals(s2, fsl.getSongList().get(1));
     }
 }
