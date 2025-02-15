@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestFavotiteSongList {
+public class TestFavoriteSongList {
 
     private FavoriteSongList fsl;
     private Song s1;
@@ -25,7 +25,7 @@ public class TestFavotiteSongList {
     @Test
     public void testAddNotFavoriteSongWithIndex() {
         assertFalse(s1.isFavorite());
-        assertFalse(fsl.addSong(s1));
+        assertFalse(fsl.addSong(0,s1));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class TestFavotiteSongList {
     @Test
     public void testAddNotFavoriteSongWithNoIndex() {
         assertFalse(s1.isFavorite());
-        assertFalse(fsl.addSong(0, s1));
+        assertFalse(fsl.addSong(s1));
     }
 
     @Test
