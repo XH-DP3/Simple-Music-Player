@@ -25,7 +25,7 @@ public class TestFavotiteSongList {
     @Test
     public void testAddNotFavoriteSongWithIndex() {
         assertFalse(s1.isFavorite());
-        assertFalse(fsl.addSong(1, s1));
+        assertFalse(fsl.addSong(s1));
     }
 
     @Test
