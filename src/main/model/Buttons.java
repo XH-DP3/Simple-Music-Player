@@ -3,7 +3,7 @@ package model;
 // Represents the buttons that the user needs to press the key
 public class Buttons {
 
-    private static final String[] FIXED_BUTTONS = { "A", "S", "D", "F", "J", "K", "L", ";" };;
+    private static final String[] FIXED_BUTTONS = { "A", "S", "D", "F", "J", "K", "L", ";" };
     private int singlePressPoints;
     private int totalPoints;
     private String nextKeyPress;
