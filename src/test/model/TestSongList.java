@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+// Represents test class for SongList class
 public class TestSongList {
 
     private SongList list;

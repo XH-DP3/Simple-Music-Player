@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+// Represents a test class for Buttons class
 public class TestButtons {
 
     private Buttons buttons;

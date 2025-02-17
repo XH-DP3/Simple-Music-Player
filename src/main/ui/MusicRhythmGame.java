@@ -19,10 +19,10 @@ public class MusicRhythmGame {
     FavoriteSongList myFavoriteList;
     Buttons buttons;
 
-    // EFFECTS: intialize the fields and invoke the menu
+    // EFFECTS: Intialize the fields and invoke the menu
     public MusicRhythmGame() {
         setup();
-        printm("Wecome to the game!");
+        printm("Welcome to the game!");
         println();
         printm("Please enter your username: ");
         println();
@@ -32,7 +32,8 @@ public class MusicRhythmGame {
         menuHelper();
     }
 
-    // Initialize the fields.
+    // MODIFIES: this
+    // EFFECTS: Initialize the fields.
     public void setup() {
         in = new Scanner(System.in);
         musicLibrary = new SongList();
@@ -61,6 +62,7 @@ public class MusicRhythmGame {
         System.out.println(message);
     }
 
+    // MODIFIES: this
     // EFFECTS: printing the menu// EFFECTS: showing the menu panel and receives an
     // input from user about the
     // next command. It will invoke the evaluateInputForMenu() and handle the
@@ -135,7 +137,7 @@ public class MusicRhythmGame {
         }
     }
 
-    // EFFECTS: starts the game and evaluate if the key press from user is correrct.
+    // EFFECTS: starts the game and evaluate if the key press from user is correct.
     // If the key press is correct, print an appropriate message and show the total
     // points the user received. Otherwise, print an error message.
     public void start(Song mySong) {
@@ -189,7 +191,7 @@ public class MusicRhythmGame {
     // Then return to the menu
     public void end() {
         println();
-        printm("Game ends. Yout got " + getTotalPoint() + " points");
+        printm("Game ends. You got " + getTotalPoint() + " points");
         menu();
     }
 
@@ -205,6 +207,7 @@ public class MusicRhythmGame {
         return musicLibrary;
     }
 
+    // MODIFIES: this
     // EFFECTS: show the music library panel and ask for input from user.
     public void musicLibrary() {
         while (true) {
@@ -215,7 +218,8 @@ public class MusicRhythmGame {
                 printSongInfo(getMusicLibrary());
                 printm("Please select one of the following by typing a valid integer:");
                 printm("1. Add song to my song list.");
-                printm("2. Return to the menu");
+                printm("2. Add new song to the music library.");
+                printm("3. Return to the menu.");
                 int input = in.nextInt();
                 evaluateInputForMusicLibrary(input);
             } catch (InputMismatchException e) {
@@ -233,6 +237,8 @@ public class MusicRhythmGame {
         if (input == 1) {
             addSongListHelper();
         } else if (input == 2) {
+            addNewSongToMusicLibrary();
+        } else if (input == 3) {
             menu();
         } else {
             throw new InputMismatchException();
@@ -254,6 +260,30 @@ public class MusicRhythmGame {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: add "customize" song from user to the music library.
+    public void addNewSongToMusicLibrary() {
+        try {
+            in = new Scanner(System.in);
+            printm("Please type the title of the song: ");
+            String title = in.nextLine();
+            printm("Please type the name of the author: ");
+            String author = in.nextLine();
+            printm("Please type the genre of the song: ");
+            String genre = in.nextLine();
+            printm("Please type the duration of the song: ");
+            int duration = in.nextInt();
+            musicLibrary.addSong(new Song(title, author, genre, duration));
+            println();
+            printm(title + " is added to the music library!");
+            musicLibrary();
+        } catch (InputMismatchException e) {
+            printm("Invalid input. Try again: ");
+            addNewSongToMusicLibrary();
+        }
+    }
+
+    // MODIFIES: this
     // EFFECTS: if the title is found from the music library, then invoke
     // addSongToMSongList() method. Else throw new InputMismatchException(). This
     // method will also handle the potential SongAlreadyExistsException thrown by
@@ -359,17 +389,18 @@ public class MusicRhythmGame {
     // addSongToMyFavoriteSongList() method. And for the latter, it will ask if the
     // user want to mark the song as favorite.
     public void addSongToMyFavoriteSongListHelper() {
+        println();
+        in = new Scanner(System.in);
+        printm("Please type the title of the song that you want to add: ");
         String title = in.nextLine();
-        Song s = getMusicLibrary().findSongByTitle(title);
-        while (true) {
-            try {
-                if (s != null && s.isFavorite()) {
-                    addSongToMyFavoriteSongList(s);
-                }
-            } catch (InputMismatchException e) {
-                printm("The song title is not found");
-                favoriteList();
+        Song s = getSongList().findSongByTitle(title);
+        try {
+            if (s != null) {
+                addSongToMyFavoriteSongList(s);
             }
+        } catch (InputMismatchException e) {
+            printm("The song title is not found");
+            songList();
         }
     }
 
@@ -392,15 +423,19 @@ public class MusicRhythmGame {
     // favorite, and thrown the corresponding exception.
     public void addSongToMyFavoriteSongList(Song mySong) {
         if (myFavoriteList.addSong(mySong)) {
+            println();
             printm(mySong.getTitle() + " is added to your favorite song list!");
+            favoriteList();
         } else {
             if (!mySong.isFavorite()) {
+                println();
                 printm("The song is not marked as favorite. Marked as favorite? (yes/no)?");
                 String msg = in.nextLine();
                 if (msg.equalsIgnoreCase("Yes")) {
                     mySong.markedAsFavorite();
+                    println();
                     printm("Marked as favorite. Now try add the song again.");
-                    favoriteList();
+                    songList();
                 } else {
                     printm("The song is already in you song list.");
                     favoriteList();

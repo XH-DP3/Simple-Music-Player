@@ -27,7 +27,8 @@ public class FavoriteSongList extends SongList {
     }
 
     // MODIFIES: this
-    // EFFECTS: delete the song if the title is found and return true. Otherwise, return false.
+    // EFFECTS: delete the song if the title is found and return true. Otherwise,
+    // return false.
     @Override
     public boolean deleteSong(String title) {
         for (int i = 0; i < songs.size(); i++) {

@@ -7,19 +7,18 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+// Represent test class for FavoriteSongList class
 public class TestFavoriteSongList {
 
     private FavoriteSongList fsl;
     private Song s1;
     private Song s2;
-    private Song s3;
 
     @Before
     public void setup() {
         fsl = new FavoriteSongList();
         s1 = new Song("Payphone", "Maroon 5", "Pop", 231);
         s2 = new Song("Everybody Hurts", "Avril Lavigne", "Pop", 221);
-        s3 = new Song("Innocence", "Avril Lavigne", "Pop", 233);
     }
 
     @Test

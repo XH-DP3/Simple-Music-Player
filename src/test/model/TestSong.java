@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.*;
 
+// Represents test class for Song class
 public class TestSong {
     private Song mySong;
 
