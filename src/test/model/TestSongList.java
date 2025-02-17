@@ -80,7 +80,7 @@ public class TestSongList {
     @Test
     public void testAddOneSongWithNoIndex() {
         assertTrue(list.addSong(s1));
-        List<Song> l = list.getSongList();
+        List<Song> l = list.getSongs();
         assertEquals(1, l.size());
         assertEquals(s1, l.get(0));
     }
@@ -90,7 +90,7 @@ public class TestSongList {
         assertTrue(list.addSong(s1));
         assertTrue(list.addSong(s2));
         assertTrue(list.addSong(s3));
-        List<Song> l = list.getSongList();
+        List<Song> l = list.getSongs();
         assertEquals(3, l.size());
         assertEquals(s1, l.get(0));
         assertEquals(s2, l.get(1));
@@ -104,7 +104,7 @@ public class TestSongList {
         list.addSong(s3);
         Song s4 = new Song("Whataya Want from me", "Adam Lambert", "Pop", 227);
         assertTrue(list.addSong(1, s4));
-        assertEquals(s4, list.getSongList().get(1));
+        assertEquals(s4, list.getSongs().get(1));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class TestSongList {
         assertTrue(list.addSong(s3));
         assertTrue(list.deleteSong(0));
         assertEquals(2, list.getSize());
-        assertFalse(list.getSongList().contains(s1));
+        assertFalse(list.getSongs().contains(s1));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class TestSongList {
         assertTrue(list.addSong(s3));
         assertTrue(list.deleteSong(s1.getTitle()));
         assertEquals(2, list.getSize());
-        assertFalse(list.getSongList().contains(s1));
+        assertFalse(list.getSongs().contains(s1));
     }
 
     @Test
@@ -172,7 +172,7 @@ public class TestSongList {
         assertTrue(list.addSong(s2));
         assertTrue(list.addSong(s3));
         list.sortByLowestDuration();
-        List<Song> sortedList = list.getSongList();
+        List<Song> sortedList = list.getSongs();
         assertEquals(s2, sortedList.get(0));
         assertEquals(s1, sortedList.get(1));
         assertEquals(s3, sortedList.get(2));
@@ -190,7 +190,7 @@ public class TestSongList {
         assertTrue(list.addSong(s2));
         assertTrue(list.addSong(s3));
         list.sortByHighestDuration();
-        List<Song> sortedList = list.getSongList();
+        List<Song> sortedList = list.getSongs();
         assertEquals(s3, sortedList.get(0));
         assertEquals(s1, sortedList.get(1));
         assertEquals(s2, sortedList.get(2));
@@ -201,5 +201,4 @@ public class TestSongList {
         list.sortByHighestDuration();
         assertEquals(0, list.getSize());
     }
-
 }

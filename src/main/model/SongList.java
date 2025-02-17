@@ -6,27 +6,27 @@ import java.util.List;
 // Represent a song list that contains all available songs
 public class SongList {
 
-    private List<Song> songList;
+    private List<Song> songs;
 
     // EFFECTS: construct an empty list
     public SongList() {
-        songList = new LinkedList<>();
+        songs = new LinkedList<>();
     }
 
     // EFFECTS: return the size of the list
     public int getSize() {
-        return songList.size();
+        return songs.size();
     }
 
     // EFFECTS: reuturn this song list
-    public List<Song> getSongList() {
-        return songList;
+    public List<Song> getSongs() {
+        return songs;
     }
 
     // EFFECTS: return true if the title of the song is contained in the list
     public boolean isContained(String title) {
-        for (int i = 0; i < songList.size(); i++) {
-            if (songList.get(i).getTitle().equals(title)) {
+        for (int i = 0; i < songs.size(); i++) {
+            if (songs.get(i).getTitle().equals(title)) {
                 return true;
             }
         }
@@ -40,7 +40,7 @@ public class SongList {
 
     // EFFECTS: Return the song if found. Otherwise, return null.
     public Song findSongByTitle(String title) {
-        for (Song s : songList) {
+        for (Song s : songs) {
             if (s.getTitle().equals(title)) {
                 return s;
             }
@@ -52,7 +52,7 @@ public class SongList {
     // null.
     public List<Song> findSongByAuthor(String author) {
         List<Song> hasAuthor = new LinkedList<>();
-        for (Song s : songList) {
+        for (Song s : songs) {
             if (s.getAuthor().equals(author)) {
                 hasAuthor.add(s);
             }
@@ -65,7 +65,7 @@ public class SongList {
     // EFFECT: add mySong at the specific index to the song list and return true
     public boolean addSong(int index, Song mySong) {
         if ((checkValidIndex(index)) && (!isContained(mySong.getTitle()))) {
-            songList.add(index, mySong);
+            songs.add(index, mySong);
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ public class SongList {
     // EFFECT: add mySong to the end of the list and return true;
     public boolean addSong(Song mySong) {
         if (!isContained(mySong.getTitle())) {
-            return songList.add(mySong);
+            return songs.add(mySong);
         }
         return false;
     }
@@ -87,7 +87,7 @@ public class SongList {
     // true
     public boolean deleteSong(int index) {
         if (checkValidIndex(index)) {
-            songList.remove(index);
+            songs.remove(index);
             return true;
         }
         return false;
@@ -98,7 +98,7 @@ public class SongList {
     // If the song title is not found, return false.
     public boolean deleteSong(String songTitle) {
         for (int i = 0; i < getSize(); i++) {
-            if (songList.get(i).getTitle().equals(songTitle)) {
+            if (songs.get(i).getTitle().equals(songTitle)) {
                 return deleteSong(i);
             }
         }
@@ -108,7 +108,7 @@ public class SongList {
     // MODIFIES: this
     // EFFECTS: reset the list
     public void reset() {
-        songList = new LinkedList<>();
+        songs = new LinkedList<>();
     }
 
     // REQUIRES: getSize() > 0
@@ -119,13 +119,13 @@ public class SongList {
             for (int i = 0; i < getSize(); i++) {
                 int minIndex = i;
                 for (int j = i + 1; j < getSize(); j++) {
-                    if (songList.get(minIndex).getDuration() > songList.get(j).getDuration()) {
+                    if (songs.get(minIndex).getDuration() > songs.get(j).getDuration()) {
                         minIndex = j;
                     }
                 }
-                Song temp = songList.get(minIndex);
-                songList.set(minIndex, songList.get(i));
-                songList.set(i, temp);
+                Song temp = songs.get(minIndex);
+                songs.set(minIndex, songs.get(i));
+                songs.set(i, temp);
             }
         }
     }
@@ -138,13 +138,13 @@ public class SongList {
             for (int i = 0; i < getSize(); i++) {
                 int maxIndex = i;
                 for (int j = i + 1; j < getSize(); j++) {
-                    if (songList.get(maxIndex).getDuration() < songList.get(j).getDuration()) {
+                    if (songs.get(maxIndex).getDuration() < songs.get(j).getDuration()) {
                         maxIndex = j;
                     }
                 }
-                Song temp = songList.get(maxIndex);
-                songList.set(maxIndex, songList.get(i));
-                songList.set(i, temp);
+                Song temp = songs.get(maxIndex);
+                songs.set(maxIndex, songs.get(i));
+                songs.set(i, temp);
             }
         }
     }

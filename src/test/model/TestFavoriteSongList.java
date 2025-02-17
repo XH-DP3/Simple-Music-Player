@@ -23,34 +23,41 @@ public class TestFavoriteSongList {
     }
 
     @Test
-    public void testAddNotFavoriteSongWithIndex() {
-        assertFalse(s1.isFavorite());
-        assertFalse(fsl.addSong(0, s1));
-    }
-
-    @Test
-    public void testAddFavoriteSongWithIndex() {
-        s1.markedAsFavorite();
-        s2.markedAsFavorite();
-        assertTrue(fsl.addSong(s1));
-        assertTrue(fsl.addSong(0, s2));
-        assertEquals(s2, fsl.getSongList().get(0));
-        assertEquals(s1, fsl.getSongList().get(1));
-    }
-
-    @Test
-    public void testAddNotFavoriteSongWithNoIndex() {
+    public void testAddNotFavoriteSong() {
         assertFalse(s1.isFavorite());
         assertFalse(fsl.addSong(s1));
     }
 
     @Test
-    public void testAddFavoriteSongWithNoIndex() {
+    public void testAddRepeatdSong() {
+        s1.markedAsFavorite();
+        assertTrue(fsl.addSong(s1));
+        assertFalse(fsl.addSong(s1));
+        assertEquals(1, fsl.getSize());
+    }
+
+    @Test
+    public void testAddFavoriteSong() {
         s1.markedAsFavorite();
         s2.markedAsFavorite();
         assertTrue(fsl.addSong(s1));
         assertTrue(fsl.addSong(s2));
-        assertEquals(s1, fsl.getSongList().get(0));
-        assertEquals(s2, fsl.getSongList().get(1));
+        assertEquals(s1, fsl.getSongs().get(0));
+        assertEquals(s2, fsl.getSongs().get(1));
     }
+
+    @Test
+    public void testDeleteFoundSong() {
+        s1.markedAsFavorite();
+        assertTrue(fsl.addSong(s1));
+        assertTrue(fsl.deleteSong(s1.getTitle()));
+    }
+
+    @Test
+    public void testDeleteNotFoundSong() {
+        s1.markedAsFavorite();
+        assertTrue(fsl.addSong(s1));
+        assertFalse(fsl.deleteSong("ABC"));
+    }
+
 }

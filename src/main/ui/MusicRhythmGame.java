@@ -7,11 +7,10 @@ import java.util.Scanner;
 import model.Buttons;
 import model.FavoriteSongList;
 import model.Song;
-import model.SongAlreadyExistsException;
-import model.SongIsNotFavoriteException;
 import model.SongList;
 
-//represent a music rhythm game application
+// Represent a music rhythm game application with a general music library,
+// my song list, my favorite song list, and buttons.
 public class MusicRhythmGame {
     Scanner in;
     String username;
@@ -20,7 +19,7 @@ public class MusicRhythmGame {
     FavoriteSongList myFavoriteList;
     Buttons buttons;
 
-    // EFFECTS: start the game
+    // EFFECTS: intialize the fields and invoke the menu
     public MusicRhythmGame() {
         setup();
         printm("Wecome to the game!");
@@ -28,6 +27,7 @@ public class MusicRhythmGame {
         printm("Please enter your username: ");
         println();
         username = in.nextLine();
+        println();
         printm("Hello " + username);
         menuHelper();
     }
@@ -61,7 +61,10 @@ public class MusicRhythmGame {
         System.out.println(message);
     }
 
-    // EFFECTS: printing the menu
+    // EFFECTS: printing the menu// EFFECTS: showing the menu panel and receives an
+    // input from user about the
+    // next command. It will invoke the evaluateInputForMenu() and handle the
+    // potential InputMismatchException().
     public void menu() throws InputMismatchException {
         in = new Scanner(System.in);
         println();
@@ -79,6 +82,7 @@ public class MusicRhythmGame {
     }
 
     // EFFECTS: it will call menu and handle the potential InputMismatchException
+    // thrown by menu
     public void menuHelper() {
         while (true) {
             try {
@@ -91,7 +95,8 @@ public class MusicRhythmGame {
         }
     }
 
-    // EFFECTS: it will evaluate input and call the corresponding method
+    // EFFECTS: it will evaluate input from the user in the menu panel and invoke
+    // the corresponding panel
     public void evaluateInputForMenu(int input) {
         if (input == 1) {
             startHelper();
@@ -106,26 +111,33 @@ public class MusicRhythmGame {
         }
     }
 
-    // REQUIRES:
-    // EFFECTS: start the game
+    // REQUIRES: user's song list is not empty
+    // EFFECTS: start the game if the song title is found in either song list or
+    // favorite song list. Otherwise, print an error message and reask for input.
     public void startHelper() {
         if (getSongList().getSize() == 0) {
+            println();
             printm("Your music list is empty. Please add songs to your list first.");
             menu();
-        }
-        println();
-        printSongInfo(getMusicLibrary());
-        printm("Please enter the title of the song that you want to play: ");
-        String msg = in.nextLine();
-        Song s = getSongList().findSongByTitle(msg);
-        if (s != null) {
-            start(s);
         } else {
-            printm(msg + " is not found");
-            startHelper();
+            println();
+            printSongInfo(getMusicLibrary());
+            printm("Please enter the title of the song that you want to play: ");
+            in.nextLine();
+            String msg = in.nextLine();
+            Song s = getSongList().findSongByTitle(msg);
+            if (s != null) {
+                start(s);
+            } else {
+                printm(msg + " is not found");
+                startHelper();
+            }
         }
     }
 
+    // EFFECTS: starts the game and evaluate if the key press from user is correrct.
+    // If the key press is correct, print an appropriate message and show the total
+    // points the user received. Otherwise, print an error message.
     public void start(Song mySong) {
         println();
         printm("Game is starting");
@@ -136,6 +148,7 @@ public class MusicRhythmGame {
             int random = (int) (Math.random() * 8);
             generatingButtons(random);
             printm("(Type Q to quit the game)");
+            println();
             printm("The next falling button is: " + buttons.getNextFallingButton());
             println();
             printm("Press keys: " + Arrays.toString(buttons.getFixedButtons()));
@@ -151,6 +164,7 @@ public class MusicRhythmGame {
         }
     }
 
+    // EFFECTS: generating the next falling buttons that the user has to press
     public void generatingButtons(int random) {
         if (random == 0) {
             buttons.setNextKeyPress("A");
@@ -171,7 +185,8 @@ public class MusicRhythmGame {
         }
     }
 
-    // EFFECTS: finish the game
+    // EFFECTS: finish the game and show the total point that the user received.
+    // Then return to the menu
     public void end() {
         println();
         printm("Game ends. Yout got " + getTotalPoint() + " points");
@@ -185,16 +200,17 @@ public class MusicRhythmGame {
         System.exit(1);
     }
 
-    // EFFECTS: return the "available songs" object as a list
+    // EFFECTS: return the music library
     public SongList getMusicLibrary() {
         return musicLibrary;
     }
 
-    // EFFECTS: show the music library panel
+    // EFFECTS: show the music library panel and ask for input from user.
     public void musicLibrary() {
         while (true) {
             try {
                 in = new Scanner(System.in);
+                println();
                 printm("Below are currently available songs: ");
                 printSongInfo(getMusicLibrary());
                 printm("Please select one of the following by typing a valid integer:");
@@ -210,6 +226,9 @@ public class MusicRhythmGame {
         }
     }
 
+    // EFFECTS: evaluate the input from the user for music library. If the input is
+    // valid, invoking the corresponding panel. Otherwise, throw new
+    // InputMismatchException()
     public void evaluateInputForMusicLibrary(int input) throws InputMismatchException {
         if (input == 1) {
             addSongListHelper();
@@ -220,21 +239,30 @@ public class MusicRhythmGame {
         }
     }
 
-    // EFFECTS: add song to the song list
-    public void addSongToMySongList(Song mySong) throws SongAlreadyExistsException {
+    // EFFECTS: add song to the song list. If the song is added sucessfully, print a
+    // success message and return to the music library panel. Otherwise, throw new
+    // SongAlreadyExistsException()
+    public void addSongToMySongList(Song mySong) {
         if (mySongList.addSong(mySong)) {
+            println();
             printm(mySong.getTitle() + " is added to you song list!");
             getMusicLibrary();
         } else {
-            throw new SongAlreadyExistsException();
+            println();
+            printm("The song is already in you song list.");
+            getMusicLibrary();
         }
     }
 
-    // EFFECTS: if the title is found, then add the song to my song list.
+    // EFFECTS: if the title is found from the music library, then invoke
+    // addSongToMSongList() method. Else throw new InputMismatchException(). This
+    // method will also handle the potential SongAlreadyExistsException thrown by
+    // addSongToMySongList().
     public void addSongListHelper() {
         while (true) {
             try {
                 in = new Scanner(System.in);
+                println();
                 printm("Please enter the song title: ");
                 String msg = in.nextLine();
                 Song s = getMusicLibrary().findSongByTitle(msg);
@@ -245,30 +273,35 @@ public class MusicRhythmGame {
                     throw new InputMismatchException();
                 }
             } catch (InputMismatchException e) {
-                printm("Invalid input. Try again");
-                continue;
-            } catch (SongAlreadyExistsException e) {
-                printm("The song is already in you song list.");
-                continue;
+                printm("Invalid input.");
+                musicLibrary();
             }
         }
     }
 
+    // EFFECTS: delete the song from the user's song list if the input title is
+    // found and print a success message. Otherwise, print an error message and
+    // return to the song list panel.
     public void deleteSongFromMySongList() {
         println();
+        in.nextLine();
         printm("Please enter the title: ");
         String msg = in.nextLine();
         Song s = getSongList().findSongByTitle(msg);
         if (s != null) {
             getSongList().deleteSong(s.getTitle());
+            println();
             printm(msg + " is deleted");
             songList();
         } else {
+            println();
             printm(msg + " is not found");
             songList();
         }
     }
 
+    // EFFECTS: invoke the song list panel and hanle the potential
+    // InputMismatchException thrown by song list panel.
     public void songListHelper() {
         while (true) {
             try {
@@ -281,10 +314,13 @@ public class MusicRhythmGame {
         }
     }
 
-    // EFFECTS: show my song list panel
+    // EFFECTS: show the song list panel. If the user enters a valid input, invoke
+    // the evaluateInputForSongList() method. Otherwise, throw new
+    // InputMismatchException()
     public void songList() {
         println();
         printm("Your song list has: ");
+        println();
         printSongInfo(mySongList);
         printm("Please select one of the following by typing a valid integer");
         printm("1. Add song to your favorite list");
@@ -294,23 +330,34 @@ public class MusicRhythmGame {
         if (input < 1 || input > 3) {
             throw new InputMismatchException();
         }
-        evaluateInputForFavoriteList(input);
+        evaluateInputForSongList(input);
     }
 
+    // EFFECTS: evaluate the input from user for the song list panel. If the input
+    // is valid, invoke the corresponding methods. Otherwise, throw new
+    // InputMismatchException()
     public void evaluateInputForSongList(int input) {
         if (input == 1) {
             addSongToMyFavoriteSongListHelper();
         } else if (input == 2) {
             deleteSongFromMySongList();
+        } else if (input == 3) {
+            menu();
         } else {
             throw new InputMismatchException();
         }
     }
 
+    // EFFECTS: return the song list.
     public SongList getSongList() {
         return mySongList;
     }
 
+    // EFFECTS: if the title is found from the song list, then invoke
+    // addSongToMyFavoriteSongList() method. It will handle the
+    // SongAlreadyExistsException and SongIsNotFavoriteException thrown by
+    // addSongToMyFavoriteSongList() method. And for the latter, it will ask if the
+    // user want to mark the song as favorite.
     public void addSongToMyFavoriteSongListHelper() {
         String title = in.nextLine();
         Song s = getMusicLibrary().findSongByTitle(title);
@@ -319,19 +366,15 @@ public class MusicRhythmGame {
                 if (s != null && s.isFavorite()) {
                     addSongToMyFavoriteSongList(s);
                 }
-            } catch (SongAlreadyExistsException e) {
-                printm("The song is already in you song list.");
-            } catch (SongIsNotFavoriteException e) {
-                printm("The song is not marked as favorite. Marked as favorite? (yes/no)?");
-                String msg = in.nextLine();
-                if (msg.equalsIgnoreCase("Yes")) {
-                    s.markedAsFavorite();
-                    printm("Marked as favorite. Now try add the song again.");
-                }
+            } catch (InputMismatchException e) {
+                printm("The song title is not found");
+                favoriteList();
             }
         }
     }
 
+    // EFFECTS: a helper method that invokes favorite list panel and handle the
+    // potential InputMismatchException thrown by it.
     public void favoriteSongListHelper(String title) {
         while (true) {
             try {
@@ -344,23 +387,34 @@ public class MusicRhythmGame {
         }
     }
 
-    public void addSongToMyFavoriteSongList(Song mySong) throws SongAlreadyExistsException, SongIsNotFavoriteException {
-        if (mySongList.addSong(mySong)) {
+    // EFFECTS: add song to my favorite song list and print a successful message.
+    // Otherwise, determines if the song is already exists, or the song is not
+    // favorite, and thrown the corresponding exception.
+    public void addSongToMyFavoriteSongList(Song mySong) {
+        if (myFavoriteList.addSong(mySong)) {
             printm(mySong.getTitle() + " is added to your favorite song list!");
         } else {
             if (!mySong.isFavorite()) {
-                throw new SongIsNotFavoriteException();
-            } else {
-                throw new SongAlreadyExistsException();
+                printm("The song is not marked as favorite. Marked as favorite? (yes/no)?");
+                String msg = in.nextLine();
+                if (msg.equalsIgnoreCase("Yes")) {
+                    mySong.markedAsFavorite();
+                    printm("Marked as favorite. Now try add the song again.");
+                    favoriteList();
+                } else {
+                    printm("The song is already in you song list.");
+                    favoriteList();
+                }
+
             }
         }
     }
 
-    // EFFECTS: show my favorite list
+    // EFFECTS: show my favorite list panel
     public void favoriteList() throws InputMismatchException {
         println();
         printm("Your favorite song list has: ");
-        printSongInfo(mySongList);
+        printSongInfo(myFavoriteList);
         printm("Please select one of the following by typing a valid integer: ");
         printm("1. Remove an existing song from your favorite list by typing the title");
         printm("2. Return to the menu");
@@ -371,6 +425,8 @@ public class MusicRhythmGame {
         evaluateInputForFavoriteList(input);
     }
 
+    // EFFECTS: evaluate input from user for the favorite list panel. If the input
+    // is valid, invoke the corresponding method.
     public void evaluateInputForFavoriteList(int input) {
         if (input == 1) {
             deleteSongFromMyFavoriteList();
@@ -379,9 +435,12 @@ public class MusicRhythmGame {
         }
     }
 
+    // EFFECTS: delete the song from user's favorite list if the song is found.
+    // Otherwise, return to the favorite list panel.
     public void deleteSongFromMyFavoriteList() {
         println();
         printm("Please enter the title: ");
+        in.nextLine();
         String msg = in.nextLine();
         Song s = getMyFavoriteSongList().findSongByTitle(msg);
         if (s != null) {
@@ -394,6 +453,7 @@ public class MusicRhythmGame {
         }
     }
 
+    // EFFECTS: return the favorite song list.
     public FavoriteSongList getMyFavoriteSongList() {
         return myFavoriteList;
     }
@@ -403,13 +463,15 @@ public class MusicRhythmGame {
         return buttons.getTotalPressedPoints();
     }
 
-    // EFFECTS: printing the information of the song
+    // EFFECTS: if the list is not empty, printing the title, author, genre, and
+    // duration of each song. Otherwise, printing a message that the list is empty
+    // and return to the menu.
     public void printSongInfo(SongList list) {
         if (list.getSize() == 0) {
             printm("No songs in this list!");
             menu();
         } else {
-            for (Song s : list.getSongList()) {
+            for (Song s : list.getSongs()) {
                 printm("Song Title: " + s.getTitle());
                 printm("    Author: " + s.getAuthor());
                 printm("    Genre: " + s.getGenre());
