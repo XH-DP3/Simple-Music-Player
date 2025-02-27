@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import persistence.JsonWriter;
 
-public class TestJsonReader {
+public class TestJsonWriter {
     private JsonWriter writer;
 
     @Test
