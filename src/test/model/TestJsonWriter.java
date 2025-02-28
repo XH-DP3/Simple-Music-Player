@@ -36,7 +36,7 @@ public class TestJsonWriter {
     @Test
     public void testWriteEmptySongList() {
         try {
-            writer = new JsonWriter("./data/myTestFile.json");
+            writer = new JsonWriter("./data/myTestEmptyFile.json");
             writer.open();
             SongList mySongList = new SongList();
             assertEquals(0, mySongList.getSize());

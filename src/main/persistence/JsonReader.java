@@ -14,13 +14,14 @@ import model.SongList;
 public class JsonReader {
     
     // EFFECTS: constructs reader to read from source file
-    public JsonReader() {
+    public JsonReader(String source) {
         // stub
     }
 
     // EFFECTS: reads song list from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public void read() throws FileNotFoundException{
+    public SongList read() throws IOException{
+        return null;
         // stub
     }
 
@@ -47,8 +48,4 @@ public class JsonReader {
     private void addSongs(FavoriteSongList myFavoriteSongList, JSONObject jsonObject) {
         // stub
     }
-
-
-
-
 }
