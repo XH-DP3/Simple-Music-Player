@@ -1,14 +1,11 @@
 package model;
 
-import java.nio.channels.WritableByteChannel;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import netscape.javascript.JSObject;
-import persistence.JsonReader;
 import persistence.Writable;
 
 // Represent a song list that contains all available songs
@@ -159,18 +156,20 @@ public class SongList implements Writable {
 
     // EFFECTS: returns a JSONObject containing all songs in the song list
     @Override
-    public JSONObject toJSON() {
-        JSONObject songListJson = new JSONObject();
-        JSONArray songArray = new JSONArray();
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Your song list: ", songsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns songs in this song list as a JSON array
+    private JSONArray songsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
         for (Song s : songs) {
-            JSONObject json = new JSONObject();
-            json.put("Title: ", s.getTitle());
-            json.put("Author: ", s.getAuthor());
-            json.put("Genre: ", s.getGenre());
-            json.put("Duration: ", s.getDuration());
-            songArray.put(json);
+            jsonArray.put(s.toJson());
         }
-        songListJson.put("Your song list: ", songArray);
-        return songListJson;
+
+        return jsonArray;
     }
 }

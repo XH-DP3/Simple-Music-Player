@@ -3,8 +3,12 @@ package model;
 import java.io.*;
 import java.util.*;
 
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 // Represents a song track with a title, author name, genre, duration, lyrics, playing status, and favorite status.
-public class Song {
+public class Song implements Writable {
     private String title;
     private String author;
     private String genre;
@@ -103,5 +107,16 @@ public class Song {
     // EFFECTS: return if my song is marked as favorite
     public boolean isFavorite() {
         return isFavorite;
+    }
+
+    // EFFECTS: return this song as a json object
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Title: ", getTitle());
+        json.put("Author: ", getAuthor());
+        json.put("Genre: ", getGenre());
+        json.put("Duration: ", getDuration());
+        return json;
     }
 }

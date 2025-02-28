@@ -29,7 +29,7 @@ public class TestJsonWriter {
             writer = new JsonWriter("./data/myTestFile.json");
             writer.open();
         } catch (FileNotFoundException e) {
-            fail ("FileNotFoundException is not expected!");
+            fail("FileNotFoundException is not expected!");
         }
     }
 
@@ -43,7 +43,7 @@ public class TestJsonWriter {
             writer.write(mySongList);
             writer.close();
         } catch (IOException e) {
-            fail ("IOException is not expected!");
+            fail("IOException is not expected!");
         }
     }
 
@@ -60,7 +60,7 @@ public class TestJsonWriter {
             writer.write(mySongList);
             writer.close();
         } catch (IOException e) {
-            fail ("IOException is not expected!");
+            fail("IOException is not expected!");
         }
     }
 }

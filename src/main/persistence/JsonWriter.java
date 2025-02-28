@@ -29,7 +29,7 @@ public class JsonWriter {
     // MODIFES: this
     // EFFECTS: writes JSON representation of songlist to file
     public void write(SongList mySongList) {
-        JSONObject json = mySongList.toJSON();
+        JSONObject json = mySongList.toJson();
         saveToFile(json.toString(TAB));
     }
 
