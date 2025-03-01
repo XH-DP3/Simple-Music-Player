@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import model.Buttons;
 import model.FavoriteSongList;
 import model.Song;
 import model.SongList;
+import persistence.JsonReader;
 import persistence.JsonWriter;
 
 // Represent a music rhythm game application with a general music library,
@@ -17,7 +19,7 @@ public class MusicRhythmGame {
     String username;
     SongList musicLibrary;
     SongList mySongList;
-    FavoriteSongList myFavoriteList;
+    SongList myFavoriteList;
     Buttons buttons;
 
     // MODIFIES: this
@@ -78,8 +80,9 @@ public class MusicRhythmGame {
         printm("3. Check your song list");
         printm("4. Check your favorite song list");
         printm("5. Quit the program");
+        printm("6. Reload your saved lists");
         int input = in.nextInt();
-        if (input < 1 || input > 5) {
+        if (input < 1 || input > 6) {
             throw new InputMismatchException();
         }
         evaluateInputForMenu(input);
@@ -110,8 +113,10 @@ public class MusicRhythmGame {
             songList();
         } else if (input == 4) {
             favoriteList();
-        } else {
+        } else if (input == 5){
             quit();
+        } else {
+            reloadHelper();
         }
     }
 
@@ -203,7 +208,7 @@ public class MusicRhythmGame {
         println();
         printm("Would you like to save your progree? (yes/no)");
         String s = in.next();
-        if (!s.equals("yes") || !s.equals("no")) {
+        if (!s.equals("yes") && !s.equals("no")) {
             printm("Invalid input, please try again.");
             quit();
         } else if (s.equals("no")) {
@@ -225,7 +230,7 @@ public class MusicRhythmGame {
             printm("1. Save music library.");
             printm("2. Save song list");
             printm("3. Save favorite song list");
-            printm("4. Return to the previous page.");
+            printm("4. Finsh saving.");
             int input = in.nextInt();
             if (input < 1 || input > 4) {
                 throw new InputMismatchException();
@@ -247,17 +252,28 @@ public class MusicRhythmGame {
         } else if (input == 3) {
             writeFavoriteSongList();
         } else {
-            quit();
+            println();
+            printm("Program ends. Bye!");
+            System.exit(1);
         }
     }
 
     // EFFECTS: write music library to a json file
     public void writeMusicLibrary() {
         println();
-        String source = ".data/mdata/musicLibrary.json";
+        String source = "data/musicLibrary.json";
         JsonWriter writer = new JsonWriter(source);
-        writer.write(musicLibrary);
-        printm("Your music library is saved.");
+        try {
+            writer.open();
+            writer.write(musicLibrary);
+            writer.close();
+            printm("Your music library is saved.");
+            saveHelper();
+        } catch (IOException e) {
+            println();
+            printm("Your muisc library cannot be saved");
+            saveHelper();
+        }
     }
 
     // EFFECTS: write song list to a json file
@@ -267,10 +283,19 @@ public class MusicRhythmGame {
             printm("Your song list has no songs to save");
             saveHelper();
         } else {
-            String source = ".data/mdata/mySongList.json";
+            String source = "data/mySongList.json";
             JsonWriter writer = new JsonWriter(source);
-            writer.write(mySongList);
-            printm("Your song list is saved.");
+            try {
+                writer.open();
+                writer.write(mySongList);
+                writer.close();
+                printm("Your song list is saved.");
+                saveHelper();
+            } catch (IOException e) {
+                println();
+                printm("Your song list cannot be saved.");
+                saveHelper();
+            }
         }
     }
 
@@ -278,34 +303,102 @@ public class MusicRhythmGame {
     public void writeFavoriteSongList() {
         println();
         if (mySongList.getSize() == 0) {
-            printm("Your favorite song list has no songs to save");
+            printm("Your favorite song list has no songs to save.");
             saveHelper();
         } else {
-            String source = ".data/mdata/myFavoriteSongList.json";
+            String source = "data/myFavoriteSongList.json";
             JsonWriter writer = new JsonWriter(source);
-            writer.write(myFavoriteList);
-            printm("Your favorite song list is saved.");
+            try {
+                writer.open();
+                writer.write(myFavoriteList);
+                writer.close();
+                printm("Your favorite song list is saved.");
+                saveHelper();
+            } catch (IOException e) {
+                printm("Your favorite song list cannot be saved.");
+                saveHelper();
+            }
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: identify which attributes the user want to reload
     public void reloadHelper() {
-        // stub
+        try {
+            println();
+            in = new Scanner(System.in);
+            printm("Please select one of the following: ");
+            printm("1. Reloading music library");
+            printm("2. Reloading your song list");
+            printm("3. Reloading your favorite song list");
+            printm("4. Return to the menu");
+            int input = in.nextInt();
+            if (input < 1 || input > 4) {
+                throw new InputMismatchException();
+            }
+            evaluateInputForReload(input);
+        } catch (InputMismatchException e) {
+            printm("Invalid input. Please try again");
+        }
+    }
+
+    // EFFECTS: evaluate user's input for reload and invoke the corresponding
+    // methods
+    public void evaluateInputForReload(int input) {
+        if (input == 1) {
+            reloadMusicLibrary();
+        } else if (input == 2) {
+            reloadSongList();
+        } else if (input == 3) {
+            reloadFavoriteSongList();
+        } else {
+            menuHelper();
+        }
     }
 
     // EFFECTS: reload the music library
     public void reloadMusicLibrary() {
-        // stub
+        JsonReader reader = new JsonReader("data/musicLibrary.json");
+        try {
+            musicLibrary = reader.read();
+            println();
+            printm("Your music library has been reloaded");
+            reloadHelper();
+        } catch (IOException e) {
+            println();
+            printm("Your muisc library cannot be read");
+            reloadHelper();
+        }
     }
 
     // EFFECTS: reload the user's song list
     public void reloadSongList() {
-        // stub
+        JsonReader reader = new JsonReader("data/mySongList.json");
+        try {
+            mySongList = reader.read();
+            println();
+            printm("Your song list has been reloaded");
+            reloadHelper();
+        } catch (IOException e) {
+            println();
+            printm("Your song list cannot be read");
+            reloadHelper();
+        }
     }
 
     // EFFECTS: reload the user's favorite song list
     public void reloadFavoriteSongList() {
-        // stub
+        JsonReader reader = new JsonReader("data/myFavoriteSongList.json");
+        try {
+            myFavoriteList = reader.read();
+            println();
+            printm("Your favorite song list has been reloaded");
+            reloadHelper();
+        } catch (IOException e) {
+            println();
+            printm("Your favorite song list cannot be read");
+            reloadHelper();
+        }
     }
 
     // EFFECTS: return the music library
@@ -595,7 +688,7 @@ public class MusicRhythmGame {
     }
 
     // EFFECTS: return the favorite song list.
-    public FavoriteSongList getMyFavoriteSongList() {
+    public SongList getMyFavoriteSongList() {
         return myFavoriteList;
     }
 
