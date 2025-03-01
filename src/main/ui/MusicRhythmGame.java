@@ -288,6 +288,26 @@ public class MusicRhythmGame {
         }
     }
 
+    // EFFECTS: identify which attributes the user want to reload
+    public void reloadHelper() {
+        // stub
+    }
+
+    // EFFECTS: reload the music library
+    public void reloadMusicLibrary() {
+        // stub
+    }
+
+    // EFFECTS: reload the user's song list
+    public void reloadSongList() {
+        // stub
+    }
+
+    // EFFECTS: reload the user's favorite song list
+    public void reloadFavoriteSongList() {
+        // stub
+    }
+
     // EFFECTS: return the music library
     public SongList getMusicLibrary() {
         return musicLibrary;
