@@ -15,19 +15,41 @@ import persistence.JsonWriter;
 // Represent a music rhythm game application with a general music library,
 // my song list, my favorite song list, and buttons.
 public class MusicRhythmGame {
-    Scanner in;
-    SongList musicLibrary;
-    SongList mySongList;
-    SongList myFavoriteList;
-    Buttons buttons;
+    private static final String MUSIC_LIBRARY_PATH = "data/musicLibrary.json";
+    private static final String SONG_LIST_PATH = "data/mySongList.json";
+    private static final String FAVORITE_LIST_PATH = "data/myFavoriteSongList.json";
+    private Scanner in;
+    private SongList musicLibrary;
+    private SongList mySongList;
+    private SongList myFavoriteList;
+    private Buttons buttons;
 
     // MODIFIES: this
     // EFFECTS: Intialize the fields and invoke the menu
     public MusicRhythmGame() {
         setup();
-        printm("Welcome to the game!");
-        println();
+        printm("\nWelcome to the game!\n");
         menu();
+    }
+
+    // EFFECTS: return the music library
+    public SongList getMusicLibrary() {
+        return musicLibrary;
+    }
+
+    // EFFECTS: return the song list.
+    public SongList getSongList() {
+        return mySongList;
+    }
+
+    // EFFECTS: return the favorite song list.
+    public SongList getMyFavoriteSongList() {
+        return myFavoriteList;
+    }
+
+    // EFFECTS: return the total points the player got
+    public int getTotalPoint() {
+        return buttons.getTotalPressedPoints();
     }
 
     // MODIFIES: this
@@ -47,11 +69,6 @@ public class MusicRhythmGame {
         musicLibrary.addSong(s3);
         musicLibrary.addSong(s4);
         musicLibrary.addSong(s5);
-    }
-
-    // EFFECTS: a helper method that will print an empty line
-    public void println() {
-        System.out.println();
     }
 
     // EFFECTS: a helper method that will print message.
@@ -75,14 +92,13 @@ public class MusicRhythmGame {
     public void menu() throws InputMismatchException {
         try {
             in = new Scanner(System.in);
-            println();
-            printm("Please select one of the following by entering an integer: ");
-            printm("1. Playing the game");
-            printm("2. Check music library");
-            printm("3. Check your song list");
-            printm("4. Check your favorite song list");
-            printm("5. Quit the program");
-            printm("6. Reload your saved lists");
+            printm("\nPlease select one of the following by entering an integer: \n");
+            printm("1. Playing the game.");
+            printm("2. Check music library.");
+            printm("3. Check your song list.");
+            printm("4. Check your favorite song list.");
+            printm("5. Quit the program.");
+            printm("6. Reload your saved lists.");
             int input = in.nextInt();
             checkValidInput(input, 1, 6);
             evaluateInputForMenu(input);
@@ -111,23 +127,24 @@ public class MusicRhythmGame {
     }
 
     // REQUIRES: user's song list is not empty
+    // MODIFIES: this
     // EFFECTS: start the game if the song title is found in either song list or
     // favorite song list. Otherwise, print an error message and reask for input.
     public void startHelper() {
         if (getSongList().getSize() == 0) {
-            println();
-            printm("Your music list is empty. Please add songs to your list first.");
+            printm("\nYour music list is empty. Please add songs to your list first.");
             menu();
         } else {
-            println();
+            in = new Scanner(System.in);
+            printm("Below are all songs in the music library: \n");
             printSongInfo(getMusicLibrary());
-            printm("Please enter the title of the song that you want to play: ");
+            printm("\nPlease enter the title of the song that you want to play: \n");
             String msg = in.nextLine();
             Song s = getSongList().findSongByTitle(msg);
             if (s != null) {
                 start(s);
             } else {
-                printm(msg + " is not found");
+                printm("\n" + msg + " is not found.");
                 startHelper();
             }
         }
@@ -137,27 +154,24 @@ public class MusicRhythmGame {
     // If the key press is correct, print an appropriate message and show the total
     // points the user received. Otherwise, print an error message.
     public void start(Song mySong) {
-        println();
-        printm("Game is starting");
+        printm("\nGame is starting.");
         printm("Playing " + mySong.getTitle());
         mySong.playSong();
         boolean isOver = false;
         while (!isOver) {
             int random = (int) (Math.random() * 8);
             generatingButtons(random);
-            printm("(Type Q to quit the game)");
-            println();
-            printm("The next falling button is: " + buttons.getNextFallingButton());
-            println();
-            printm("Press keys: " + Arrays.toString(buttons.getFixedButtons()));
+            printm("\n(Type Q to quit the game)\n");
+            printm("\nThe next falling button is: " + buttons.getNextFallingButton());
+            printm("\nPress keys: " + Arrays.toString(buttons.getFixedButtons()));
             String msg = in.nextLine();
             if (buttons.checkKeyPress(msg)) {
-                printm("Good job! You got " + getTotalPoint());
+                printm("\nGood job! You got " + getTotalPoint() + "\n");
             } else if (msg.equals("Q")) {
                 isOver = true;
                 end();
             } else {
-                printm("Wrong key press!");
+                printm("\nWrong key press!\n");
             }
         }
     }
@@ -170,13 +184,13 @@ public class MusicRhythmGame {
             buttons.setNextKeyPress("S");
         } else if (random == 2) {
             buttons.setNextKeyPress("D");
-        } else if (random == 4) {
+        } else if (random == 3) {
             buttons.setNextKeyPress("F");
-        } else if (random == 5) {
+        } else if (random == 4) {
             buttons.setNextKeyPress("J");
-        } else if (random == 6) {
+        } else if (random == 5) {
             buttons.setNextKeyPress("K");
-        } else if (random == 7) {
+        } else if (random == 6) {
             buttons.setNextKeyPress("L");
         } else {
             buttons.setNextKeyPress(";");
@@ -186,8 +200,7 @@ public class MusicRhythmGame {
     // EFFECTS: finish the game and show the total point that the user received.
     // Then return to the menu
     public void end() {
-        println();
-        printm("Game ends. You got " + getTotalPoint() + " points");
+        printm("\nGame ends. You got " + getTotalPoint() + " points.");
         menu();
     }
 
@@ -195,38 +208,35 @@ public class MusicRhythmGame {
     // EFFECTS: ask the user if they want to save their music library, song list,
     // and favorite song list then quit the program
     public void quit() {
-        println();
-        printm("Would you like to save your progree? (yes/no)");
+        printm("\nWould you like to save your progress (yes/no)?");
         String s = in.next();
         if (!s.equals("yes") && !s.equals("no")) {
-            printm("Invalid input, please try again.");
+            printm("Invalid input. Please try again.");
             quit();
         } else if (s.equals("no")) {
-            printm("Your progress is not saved.");
+            printm("\nYour progress for this time is not saved.");
         } else {
             saveHelper();
         }
-        printm("Program ends. Bye!");
+        printm("\nProgram ends. Bye!\n");
         System.exit(1);
     }
 
     // EFFECTS: identify which attribute(s) the user want to save
     public void saveHelper() {
         try {
-            println();
-            printm("Please select one of the following:");
-            println();
+            printm("\nPlease select one of the following:\n");
             in = new Scanner(System.in);
             printm("1. Save music library.");
-            printm("2. Save song list");
-            printm("3. Save favorite song list");
-            printm("4. Finsh saving.");
+            printm("2. Save song list.");
+            printm("3. Save favorite song list.");
+            printm("4. Return to the menu.");
+            printm("5. Finish saving.");
             int input = in.nextInt();
-            checkValidInput(input, 1, 4);
+            checkValidInput(input, 1, 5);
             evaluateInputForSave(input);
         } catch (InputMismatchException e) {
-            println();
-            printm("Invalid input. Please try again.");
+            printm("\nInvalid input. Please try again.");
             saveHelper();
         }
     }
@@ -234,76 +244,68 @@ public class MusicRhythmGame {
     // EFFECTS: identify the input from user for the attribute(s) they want to save
     public void evaluateInputForSave(int input) {
         if (input == 1) {
-            writeMusicLibrary();
+            writeMusicLibrary(MUSIC_LIBRARY_PATH);
         } else if (input == 2) {
-            writeSongList();
+            writeSongList(SONG_LIST_PATH);
         } else if (input == 3) {
-            writeFavoriteSongList();
+            writeFavoriteSongList(FAVORITE_LIST_PATH);
+        } else if (input == 4) {
+            menu();
         } else {
-            println();
-            printm("Program ends. Bye!");
+            printm("\nProgram ends. Bye!\n");
             System.exit(1);
         }
     }
 
-    // EFFECTS: write music library to a json file
-    public void writeMusicLibrary() {
-        println();
-        String source = "data/musicLibrary.json";
+    // EFFECTS: write list to source
+    public void write(String source, SongList list) throws IOException {
         JsonWriter writer = new JsonWriter(source);
+        writer.open();
+        writer.write(list);
+        writer.close();
+    }
+
+    // EFFECTS: write music library to a json file
+    public void writeMusicLibrary(String source) {
         try {
-            writer.open();
-            writer.write(musicLibrary);
-            writer.close();
-            printm("Your music library is saved.");
+            write(source, getMusicLibrary());
+            printm("\nYour music library is saved.");
             saveHelper();
         } catch (IOException e) {
-            println();
-            printm("Your muisc library cannot be saved");
+            printm("\nYour music library cannot be saved.");
             saveHelper();
         }
     }
 
     // EFFECTS: write song list to a json file
-    public void writeSongList() {
-        println();
+    public void writeSongList(String source) {
         if (mySongList.getSize() == 0) {
-            printm("Your song list has no songs to save");
+            printm("\nYour song list has no songs to save.");
             saveHelper();
         } else {
-            String source = "data/mySongList.json";
-            JsonWriter writer = new JsonWriter(source);
             try {
-                writer.open();
-                writer.write(mySongList);
-                writer.close();
-                printm("Your song list is saved.");
+                write(source, getSongList());
+                printm("\nYour song list is saved.");
                 saveHelper();
             } catch (IOException e) {
-                println();
-                printm("Your song list cannot be saved.");
+                printm("\nYour song list cannot be saved.");
                 saveHelper();
             }
         }
     }
 
     // EFFECTS: write favorite song list to a json file
-    public void writeFavoriteSongList() {
-        println();
-        if (mySongList.getSize() == 0) {
-            printm("Your favorite song list has no songs to save.");
+    public void writeFavoriteSongList(String source) {
+        if (myFavoriteList.getSize() == 0) {
+            printm("\nYour favorite song list has no songs to save.");
             saveHelper();
         } else {
-            String source = "data/myFavoriteSongList.json";
-            JsonWriter writer = new JsonWriter(source);
             try {
-                writer.open();
-                writer.write(myFavoriteList);
-                writer.close();
-                printm("Your favorite song list is saved.");
+                write(source, getMyFavoriteSongList());
+                printm("\nYour favorite song list is saved.");
                 saveHelper();
             } catch (IOException e) {
-                printm("Your favorite song list cannot be saved.");
+                printm("\nYour favorite song list cannot be saved.");
                 saveHelper();
             }
         }
@@ -313,18 +315,19 @@ public class MusicRhythmGame {
     // EFFECTS: identify which attributes the user want to reload
     public void reloadHelper() {
         try {
-            println();
             in = new Scanner(System.in);
-            printm("Please select one of the following: ");
-            printm("1. Reloading music library");
-            printm("2. Reloading your song list");
-            printm("3. Reloading your favorite song list");
-            printm("4. Return to the menu");
+            printm("\nPlease select one of the following: \n");
+            printm("1. Reloading music library.");
+            printm("2. Reloading your song list.");
+            printm("3. Reloading your favorite song list.");
+            printm("4. Delete previous saved lists.");
+            printm("5. Return to the menu.");
             int input = in.nextInt();
-            checkValidInput(input, 1, 4);
+            checkValidInput(input, 1, 5);
             evaluateInputForReload(input);
         } catch (InputMismatchException e) {
-            printm("Invalid input. Please try again");
+            printm("\nInvalid input. Please try again.");
+            reloadHelper();
         }
     }
 
@@ -332,64 +335,124 @@ public class MusicRhythmGame {
     // methods
     public void evaluateInputForReload(int input) {
         if (input == 1) {
-            reloadMusicLibrary();
+            reloadMusicLibrary(MUSIC_LIBRARY_PATH);
         } else if (input == 2) {
-            reloadSongList();
+            reloadSongList(SONG_LIST_PATH);
         } else if (input == 3) {
-            reloadFavoriteSongList();
+            reloadFavoriteSongList(FAVORITE_LIST_PATH);
+        } else if (input == 4) {
+            writeEmptyLists();
         } else {
             menu();
         }
     }
 
-    // EFFECTS: reload the music library
-    public void reloadMusicLibrary() {
-        JsonReader reader = new JsonReader("data/musicLibrary.json");
+    // EFFECTS: delete the previous saved progress by writing empty content to the
+    // files
+    public void writeEmptyLists() {
         try {
-            musicLibrary = reader.read();
-            println();
-            printm("Your music library has been reloaded");
+            write(MUSIC_LIBRARY_PATH, new SongList());
+            write(SONG_LIST_PATH, new SongList());
+            write(FAVORITE_LIST_PATH, new SongList());
+            printm("\nYour previous progress has been deleted.");
             reloadHelper();
         } catch (IOException e) {
-            println();
-            printm("Your muisc library cannot be read");
+            printm("\nThis request cannot be done.");
+            reloadHelper();
+        }
+    }
+
+    // EFFECTS: read from source and return the content as SongList
+    public SongList reload(String source) throws IOException {
+        JsonReader reader = new JsonReader(source);
+        return reader.read();
+    }
+
+    // EFFECTS: add every elements in prevList to currentList
+    public void merge(SongList prevList, SongList currentList) {
+        for (Song s : prevList.getSongs()) {
+            currentList.addSong(s);
+        }
+    }
+
+    // EFFECTS: evaluate if list is empty.
+    public boolean isEmpty(SongList list) {
+        return list.getSize() == 0;
+    }
+
+    // EFFECTS: reload the music library
+    public void reloadMusicLibrary(String source) {
+        try {
+            SongList myPrevMusicLibrary = reload(source);
+            in = new Scanner(System.in);
+            if (getMusicLibrary().getSize() > 0) {
+                printm("\nYour current music library is not empty.");
+                printm("\nWould you like to merge your previous and your current music library (yes/no)?");
+                String s = in.nextLine();
+                if (s.equals("yes")) {
+                    merge(myPrevMusicLibrary, musicLibrary);
+                }
+                printm("\nYour music library has been reloaded and merged.");
+                reloadHelper();
+            } else {
+                musicLibrary = myPrevMusicLibrary;
+                printm("\nYour music library has been reloaded.");
+                reloadHelper();
+            }
+        } catch (IOException e) {
+            printm("\nYour muisc library cannot be read.");
             reloadHelper();
         }
     }
 
     // EFFECTS: reload the user's song list
-    public void reloadSongList() {
-        JsonReader reader = new JsonReader("data/mySongList.json");
+    public void reloadSongList(String source) {
         try {
-            mySongList = reader.read();
-            println();
-            printm("Your song list has been reloaded");
-            reloadHelper();
+            SongList myPrevSongList = reload(source);
+            in = new Scanner(System.in);
+            if (mySongList.getSize() > 0) {
+                printm("\nYour current song list is not empty.");
+                printm("\nWould you like to merge your previous saved song list and your current song list (yes/no)?");
+                String s = in.nextLine();
+                if (s.equals("yes")) {
+                    merge(myPrevSongList, mySongList);
+                }
+                printm("\nYour song list has been reloaded and merged.");
+                reloadHelper();
+            } else {
+                mySongList = myPrevSongList;
+                printm("\nYour song list has been reloaded.");
+                reloadHelper();
+            }
         } catch (IOException e) {
-            println();
-            printm("Your song list cannot be read");
+            printm("\nYour song list cannot be read.");
             reloadHelper();
         }
     }
 
     // EFFECTS: reload the user's favorite song list
-    public void reloadFavoriteSongList() {
-        JsonReader reader = new JsonReader("data/myFavoriteSongList.json");
+    public void reloadFavoriteSongList(String source) {
         try {
-            myFavoriteList = reader.read();
-            println();
-            printm("Your favorite song list has been reloaded");
-            reloadHelper();
+            SongList myPrevFavoriteList = reload(source);
+            in = new Scanner(System.in);
+            if (myFavoriteList.getSize() > 0) {
+                printm("\nYour current favorite song list is not empty.");
+                printm("\nWould you like to merge your previous and current favorite song list (yes/no)?");
+                String s = in.nextLine();
+                if (s.equals("yes")) {
+                    merge(myPrevFavoriteList, myFavoriteList);
+                }
+                printm("\nYour favorite song list has been reloaded and merged.");
+                reloadHelper();
+            } else {
+                myFavoriteList = myPrevFavoriteList;
+                printm("\nYour favorite song list has been reloaded.");
+                reloadHelper();
+            }
         } catch (IOException e) {
-            println();
-            printm("Your favorite song list cannot be read");
+            printm("\nYour favorite song list cannot be read.");
             reloadHelper();
         }
-    }
-
-    // EFFECTS: return the music library
-    public SongList getMusicLibrary() {
-        return musicLibrary;
     }
 
     // MODIFIES: this
@@ -397,8 +460,7 @@ public class MusicRhythmGame {
     public void musicLibrary() {
         try {
             in = new Scanner(System.in);
-            println();
-            printm("Below are currently available songs: ");
+            printm("\nBelow are currently available songs: \n");
             printSongInfo(getMusicLibrary());
             printm("Please select one of the following by typing a valid integer:");
             printm("1. Add song to my song list.");
@@ -408,8 +470,7 @@ public class MusicRhythmGame {
             checkValidInput(input, 1, 3);
             evaluateInputForMusicLibrary(input);
         } catch (InputMismatchException e) {
-            println();
-            printm("Invalid input, please try again");
+            printm("\nInvalid input. Please try again.");
             musicLibrary();
         }
     }
@@ -434,12 +495,10 @@ public class MusicRhythmGame {
     // SongAlreadyExistsException()
     public void addSongToMySongList(Song mySong) {
         if (mySongList.addSong(mySong)) {
-            println();
-            printm(mySong.getTitle() + " is added to you song list!");
+            printm("\n" + mySong.getTitle() + " is added to you song list!");
             musicLibrary();
         } else {
-            println();
-            printm("The song is already in you song list.");
+            printm("\nThe song is already in you song list.");
             musicLibrary();
         }
     }
@@ -449,7 +508,7 @@ public class MusicRhythmGame {
     public void addNewSongToMusicLibrary() {
         try {
             in = new Scanner(System.in);
-            printm("Please type the title of the song: ");
+            printm("\nPlease type the title of the song: \n");
             String title = in.nextLine();
             printm("Please type the name of the author: ");
             String author = in.nextLine();
@@ -458,12 +517,11 @@ public class MusicRhythmGame {
             printm("Please type the duration of the song: ");
             int duration = in.nextInt();
             musicLibrary.addSong(new Song(title, author, genre, duration));
-            println();
-            printm(title + " is added to the music library!");
+            printm("\n" + title + " is added to the music library!");
             musicLibrary();
         } catch (InputMismatchException e) {
-            printm("Invalid input. Try again: ");
-            addNewSongToMusicLibrary();
+            printm("\nInvalid input. Please try again.");
+            musicLibrary();
         }
     }
 
@@ -473,43 +531,37 @@ public class MusicRhythmGame {
     // method will also handle the potential SongAlreadyExistsException thrown by
     // addSongToMySongList().
     public void addSongListHelper() {
-        while (true) {
-            try {
-                in = new Scanner(System.in);
-                println();
-                printm("Please enter the song title: ");
-                String msg = in.nextLine();
-                Song s = getMusicLibrary().findSongByTitle(msg);
-                if (s != null) {
-                    addSongToMySongList(s);
-                    break;
-                } else {
-                    throw new InputMismatchException();
-                }
-            } catch (InputMismatchException e) {
-                printm("Invalid input.");
-                musicLibrary();
+        try {
+            in = new Scanner(System.in);
+            printm("\nPlease enter the song title: ");
+            String msg = in.nextLine();
+            Song s = getMusicLibrary().findSongByTitle(msg);
+            if (s != null) {
+                addSongToMySongList(s);
+            } else {
+                throw new InputMismatchException();
             }
+        } catch (InputMismatchException e) {
+            printm("Invalid input.");
+            musicLibrary();
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: delete the song from the user's song list if the input title is
     // found and print a success message. Otherwise, print an error message and
     // return to the song list panel.
     public void deleteSongFromMySongList() {
-        println();
-        in.nextLine();
-        printm("Please enter the title: ");
+        in = new Scanner(System.in);
+        printm("\nPlease enter the title: ");
         String msg = in.nextLine();
         Song s = getSongList().findSongByTitle(msg);
         if (s != null) {
             getSongList().deleteSong(s.getTitle());
-            println();
-            printm(msg + " is deleted");
+            printm("\n" + msg + " is deleted.");
             songList();
         } else {
-            println();
-            printm(msg + " is not found");
+            printm("\n" + msg + " is not found.");
             songList();
         }
     }
@@ -519,19 +571,17 @@ public class MusicRhythmGame {
     // InputMismatchException()
     public void songList() {
         try {
-            println();
-            printm("Your song list has: ");
-            println();
+            printm("\nYour song list has: \n");
             printSongInfo(mySongList);
-            printm("Please select one of the following by typing a valid integer");
-            printm("1. Add song to your favorite list");
-            printm("2. Remove song from your song list");
-            printm("3. Return to the menu");
+            printm("Please select one of the following by typing a valid integer\n");
+            printm("1. Add song to your favorite list.");
+            printm("2. Remove song from your song list.");
+            printm("3. Return to the menu.");
             int input = in.nextInt();
             checkValidInput(input, 1, 3);
             evaluateInputForSongList(input);
         } catch (InputMismatchException e) {
-            printm("Please enter a valid integer.");
+            printm("\nPlease enter a valid integer.");
             songList();
         }
     }
@@ -551,20 +601,14 @@ public class MusicRhythmGame {
         }
     }
 
-    // EFFECTS: return the song list.
-    public SongList getSongList() {
-        return mySongList;
-    }
-
     // EFFECTS: if the title is found from the song list, then invoke
     // addSongToMyFavoriteSongList() method. It will handle the
     // SongAlreadyExistsException and SongIsNotFavoriteException thrown by
     // addSongToMyFavoriteSongList() method. And for the latter, it will ask if the
     // user want to mark the song as favorite.
     public void addSongToMyFavoriteSongListHelper() {
-        println();
         in = new Scanner(System.in);
-        printm("Please type the title of the song that you want to add: ");
+        printm("\nPlease type the title of the song that you want to add: ");
         String title = in.nextLine();
         Song s = getSongList().findSongByTitle(title);
         try {
@@ -572,7 +616,7 @@ public class MusicRhythmGame {
                 addSongToMyFavoriteSongList(s);
             }
         } catch (InputMismatchException e) {
-            printm("The song title is not found");
+            printm("\nThe song title is not found.");
             songList();
         }
     }
@@ -582,21 +626,18 @@ public class MusicRhythmGame {
     // favorite, and thrown the corresponding exception.
     public void addSongToMyFavoriteSongList(Song mySong) {
         if (myFavoriteList.addSong(mySong)) {
-            println();
-            printm(mySong.getTitle() + " is added to your favorite song list!");
+            printm("\n" + mySong.getTitle() + " is added to your favorite song list!");
             favoriteList();
         } else {
             if (!mySong.isFavorite()) {
-                println();
-                printm("The song is not marked as favorite. Marked as favorite? (yes/no)?");
+                printm("\nThe song is not marked as favorite. Marked as favorite? (yes/no)?");
                 String msg = in.nextLine();
                 if (msg.equalsIgnoreCase("Yes")) {
                     mySong.markedAsFavorite();
-                    println();
-                    printm("Marked as favorite. Now try add the song again.");
+                    printm("\nMarked as favorite. Now try add the song again.");
                     songList();
                 } else {
-                    printm("The song is already in you song list.");
+                    printm("\nThe song is already in you song list.");
                     favoriteList();
                 }
 
@@ -607,17 +648,16 @@ public class MusicRhythmGame {
     // EFFECTS: show my favorite list panel
     public void favoriteList() throws InputMismatchException {
         try {
-            println();
-            printm("Your favorite song list has: ");
+            printm("\nYour favorite song list has: \n");
             printSongInfo(myFavoriteList);
-            printm("Please select one of the following by typing a valid integer: ");
-            printm("1. Remove an existing song from your favorite list by typing the title");
-            printm("2. Return to the menu");
+            printm("\nPlease select one of the following by typing a valid integer: \n");
+            printm("1. Remove an existing song from your favorite list by typing the title.");
+            printm("2. Return to the menu.");
             int input = in.nextInt();
             checkValidInput(input, 1, 2);
             evaluateInputForFavoriteList(input);
         } catch (InputMismatchException e) {
-            printm("Invalid input. Please try again.");
+            printm("\nInvalid input. Please try again.");
             favoriteList();
         }
     }
@@ -635,29 +675,18 @@ public class MusicRhythmGame {
     // EFFECTS: delete the song from user's favorite list if the song is found.
     // Otherwise, return to the favorite list panel.
     public void deleteSongFromMyFavoriteList() {
-        println();
-        printm("Please enter the title: ");
+        printm("\nPlease enter the title: ");
         in.nextLine();
         String msg = in.nextLine();
         Song s = getMyFavoriteSongList().findSongByTitle(msg);
         if (s != null) {
             getMyFavoriteSongList().deleteSong(s.getTitle());
-            printm(msg + " is deleted");
+            printm("\n" + msg + " is deleted.");
             favoriteList();
         } else {
-            printm(msg + " is not found");
+            printm("\n" + msg + " is not found.");
             favoriteList();
         }
-    }
-
-    // EFFECTS: return the favorite song list.
-    public SongList getMyFavoriteSongList() {
-        return myFavoriteList;
-    }
-
-    // EFFECTS: return the total points the player got
-    public int getTotalPoint() {
-        return buttons.getTotalPressedPoints();
     }
 
     // EFFECTS: if the list is not empty, printing the title, author, genre, and
@@ -665,15 +694,14 @@ public class MusicRhythmGame {
     // and return to the menu.
     public void printSongInfo(SongList list) {
         if (list.getSize() == 0) {
-            printm("No songs in this list!");
+            printm("\nNo songs in this list!");
             menu();
         } else {
             for (Song s : list.getSongs()) {
                 printm("Song Title: " + s.getTitle());
                 printm("    Author: " + s.getAuthor());
                 printm("    Genre: " + s.getGenre());
-                printm("    Duration: " + s.getDuration());
-                println();
+                printm("    Duration: " + s.getDuration() + "\n");
             }
         }
     }
