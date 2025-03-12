@@ -5,7 +5,7 @@ public class MusicPlayer {
     
     // MODIFIES: this
     // EFFECTS: construct a music player object with a filepath
-    public MusicPlayer(String filepath) {
+    public MusicPlayer(String filepath) throws Exception{
         // stub
     }
 
@@ -21,6 +21,12 @@ public class MusicPlayer {
 
     // EFFECTS: return true if the music is over
     public boolean isOver() {
+        // stub
+        return false;
+    }
+
+    // EFFECTS: return true if the music is playing
+    public boolean isPlaying() {
         // stub
         return false;
     }
