@@ -7,6 +7,7 @@ import model.Buttons;
 import model.Song;
 import model.SongList;
 
+// Represent the game part
 public class RhythmGame {
     private SongListPanel songListPanel = new SongListPanel();
     private Scanner in;

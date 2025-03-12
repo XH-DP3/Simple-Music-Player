@@ -129,4 +129,13 @@ public class TestSong {
         mySong.updateTotalPoints(-100);
         assertEquals(0, mySong.getTotalPoints());
     }
+
+    @Test
+    public void testEqualityofSongs() {
+        assertTrue(mySong.equals(mySong));
+        assertFalse(mySong.equals(new Song("Payphone", "Maroon 5", "Pop", 231)));
+        assertFalse(mySong.equals(null));
+        assertFalse(mySong.equals(new Object()));
+        mySong.hashCode();
+    }
 }

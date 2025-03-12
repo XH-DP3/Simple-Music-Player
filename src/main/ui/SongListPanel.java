@@ -1,18 +1,35 @@
 package ui;
 
+import java.io.IOException;
 import java.util.*;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.FavoriteSongList;
 import model.Song;
 import model.SongList;
 
+// Represents the songlist panel page
 public class SongListPanel {
     private Scanner in;
     private SongList musicLibrary;
     private SongList mySongList;
     private SongList myFavoriteList;
+    private SongList availableList;
     private Song currentPlayingSong;
     private MainMenu mainMenu;
+
+    private Song s1 = new Song("Payphone", "Maroon 5", "Pop", 231);
+    private Song s2 = new Song("Everybody Hurts", "Avril Lavigne", "Pop", 221);
+    private Song s3 = new Song("Innocence", "Avril Lavigne", "Pop", 233);
+    private Song s4 = new Song("Whataya Want from Me", "Adam Lambert", "Pop", 227);
+    private Song s5 = new Song("Like I Do", "J.Tajor", "R&B", 149);
+    private String path1 = "data/21 Payphone.wav";
+    private String path2 = "data/08 Everybody Hurts.wav";
+    private String path3 = "data/08 Innocence.wav";
+    private String path4 = "data/03 Whataya Want from Me.wav";
+    private String path5 = "data/01 Like I Do (with sunkis).wav";
 
     // EFFECTS: construct a SongListPanel with the given main menu
     public SongListPanel(MainMenu mainMenu) {
@@ -20,16 +37,17 @@ public class SongListPanel {
         musicLibrary = new SongList();
         mySongList = new SongList();
         myFavoriteList = new FavoriteSongList();
-        Song s1 = new Song("Payphone", "Maroon 5", "Pop", 231);
-        Song s2 = new Song("Everybody Hurts", "Avril Lavigne", "Pop", 221);
-        Song s3 = new Song("Innocence", "Avril Lavigne", "Pop", 233);
-        Song s4 = new Song("Whataya Want from Me", "Adam Lambert", "Pop", 227);
-        Song s5 = new Song("Like I Do", "J.Tajor", "R&B", 149);
+        availableList = new SongList();
         musicLibrary.addSong(s1);
         musicLibrary.addSong(s2);
         musicLibrary.addSong(s3);
         musicLibrary.addSong(s4);
         musicLibrary.addSong(s5);
+        availableList.addSong(s1);
+        availableList.addSong(s2);
+        availableList.addSong(s3);
+        availableList.addSong(s4);
+        availableList.addSong(s5);
     }
 
     // constructs the song list panel with several "built in" songs.
@@ -136,9 +154,10 @@ public class SongListPanel {
             printm("Please select one of the following by typing a valid integer:");
             printm("1. Add song to my song list.");
             printm("2. Add new song to the music library.");
-            printm("3. Return to the menu.");
+            printm("3. Play the music");
+            printm("4. Return to the menu.");
             int input = in.nextInt();
-            mainMenu.checkValidInput(input, 1, 3);
+            mainMenu.checkValidInput(input, 1, 4);
             evaluateInputForMusicLibrary(input);
         } catch (InputMismatchException e) {
             printm("\nInvalid input. Please try again.");
@@ -149,15 +168,58 @@ public class SongListPanel {
     // EFFECTS: evaluate the input from the user for music library. If the input is
     // valid, invoking the corresponding panel. Otherwise, throw new
     // InputMismatchException()
-    private void evaluateInputForMusicLibrary(int input) throws InputMismatchException {
+    private void evaluateInputForMusicLibrary(int input) {
         if (input == 1) {
             addSongListHelper();
         } else if (input == 2) {
             addNewSongToMusicLibrary();
         } else if (input == 3) {
-            menu();
+            playHepler();
         } else {
-            throw new InputMismatchException();
+            menu();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: ask the user which song they want to play
+    public void playHepler() {
+        try {
+            in = new Scanner(System.in);
+            printm("\nBelow are the available songs to play: \n");
+            printSongInfo(availableList);
+            printm("\nPlease enter the song title of the song you want to play: ");
+            String title = in.nextLine();
+            Song s = availableList.findSongByTitle(title);
+            if (s == null) {
+                printm("The song is not found");
+                menu();
+            }
+            findAvailableSong(s);
+        } catch (LineUnavailableException e) {
+            printm(e.getMessage());
+            menu();
+        } catch (UnsupportedAudioFileException e) {
+            printm(e.getMessage());
+            menu();
+        } catch (IOException e) {
+            printm(e.getMessage());
+            menu();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: create a music player object and will play the corresponding song
+    private void findAvailableSong(Song s) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+        if (s.equals(s1)) {
+            new MusicPlayer(path1, mainMenu, this);
+        } else if (s.equals(s2)) {
+            new MusicPlayer(path2, mainMenu, this);
+        } else if (s.equals(s3)) {
+            new MusicPlayer(path3, mainMenu, this);
+        } else if (s.equals(s4)) {
+            new MusicPlayer(path4, mainMenu, this);
+        } else if (s.equals(s5)) {
+            new MusicPlayer(path5, mainMenu, this);
         }
     }
 
@@ -248,9 +310,10 @@ public class SongListPanel {
             printm("Please select one of the following by typing a valid integer\n");
             printm("1. Add song to your favorite list.");
             printm("2. Remove song from your song list.");
-            printm("3. Return to the menu.");
+            printm("3. Play the music");
+            printm("4. Return to the menu.");
             int input = in.nextInt();
-            mainMenu.checkValidInput(input, 1, 3);
+            mainMenu.checkValidInput(input, 1, 4);
             evaluateInputForSongList(input);
         } catch (InputMismatchException e) {
             printm("\nPlease enter a valid integer.");
@@ -267,9 +330,9 @@ public class SongListPanel {
         } else if (input == 2) {
             deleteSongFromMySongList();
         } else if (input == 3) {
-            mainMenu.menu();
+            playHepler();
         } else {
-            throw new InputMismatchException();
+            menu();
         }
     }
 
@@ -324,9 +387,10 @@ public class SongListPanel {
             printSongInfo(myFavoriteList);
             printm("\nPlease select one of the following by typing a valid integer: \n");
             printm("1. Remove an existing song from your favorite list by typing the title.");
-            printm("2. Return to the menu.");
+            printm("2. Play the music");
+            printm("3. Return to the menu.");
             int input = in.nextInt();
-            mainMenu.checkValidInput(input, 1, 2);
+            mainMenu.checkValidInput(input, 1, 3);
             evaluateInputForFavoriteList(input);
         } catch (InputMismatchException e) {
             printm("\nInvalid input. Please try again.");
@@ -339,6 +403,8 @@ public class SongListPanel {
     private void evaluateInputForFavoriteList(int input) {
         if (input == 1) {
             deleteSongFromMyFavoriteList();
+        } else if (input == 2) {
+            playHepler();
         } else {
             menu();
         }

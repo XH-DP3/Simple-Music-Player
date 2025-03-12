@@ -178,4 +178,22 @@ public class Song implements Writable {
         json.put("Playing times: ", getPlayingTimes());
         return json;
     }
+
+    // EFFECTS: return true if o has the same title as this
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+        Song s = (Song)o;
+        return s.getTitle().equals(this.getTitle());
+    }
+
+    // EFFECTS: used to comparae if the title is true, return the hashcode of title
+    @Override
+    public int hashCode() {
+        return title.hashCode();
+    }
 }

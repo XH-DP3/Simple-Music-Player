@@ -8,6 +8,7 @@ import model.SongList;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+// Represent a persistent manager that handles reloading and saving the data.
 public class PersistentManager {
     private static final String MUSIC_LIBRARY_PATH = "data/musicLibrary.json";
     private static final String SONG_LIST_PATH = "data/mySongList.json";
