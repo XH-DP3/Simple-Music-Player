@@ -138,4 +138,10 @@ public class TestSong {
         assertFalse(mySong.equals(new Object()));
         mySong.hashCode();
     }
+
+    @Test
+    public void testSetMelodyFilePath() {
+        mySong.setMelodyFilepath("ATestFilePath");
+        assertEquals("ATestFilePath", mySong.getMeolodyFilePath());
+    }
 }
