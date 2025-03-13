@@ -18,6 +18,7 @@ public class MainMenuGUI extends JFrame{
     private JButton reload;
     private JButton quit;
     private MusicLibraryGUI musicLibraryGUI = new MusicLibraryGUI(this);
+    private SongListGUI songListGUI = new SongListGUI(this, musicLibraryGUI);
 
     // EFFECTS: contruct the main menu panel by invoking it
     public MainMenuGUI() {
@@ -86,7 +87,7 @@ public class MainMenuGUI extends JFrame{
 
     // EFFECTS: handle the case when song list button is clicked
     private void handleSongListClicked() {
-        // stub
+        songListGUI.songList();
     }
 
     // EFFECTS: handle the case when favorite list button is clicked

@@ -1,4 +1,4 @@
-package ui;
+package ui.ConsoleBased;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

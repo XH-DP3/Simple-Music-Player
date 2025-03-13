@@ -16,7 +16,7 @@ import javax.swing.WindowConstants;
 import model.Song;
 import model.SongList;
 
-// Represent the song list panel including the music library, song list, and favorite list
+// Represent music library with default built in songs
 public class MusicLibraryGUI extends JFrame{
     private JButton add;
     private JButton delete;
@@ -68,6 +68,7 @@ public class MusicLibraryGUI extends JFrame{
                 "   Duration: " + mySong.getDuration();
     }
 
+    // MODIFIES: this
     // EFFECTS: print the information of the song toghet
     private void printSongInfo(Song mySong, String imagePath) {
         JPanel panel = new JPanel();
@@ -82,6 +83,7 @@ public class MusicLibraryGUI extends JFrame{
         frame.add(panel);
     }
 
+    // MODIFIES: this
     // EFFECTS: invoke the music library page
     public void musicLibrary() {
         frame = new JFrame("Music Library");
@@ -100,6 +102,7 @@ public class MusicLibraryGUI extends JFrame{
         addActionListeners();
     }
 
+    // MODIFIES: this
     // EFFECTS: add action listener for each JButton object and will invoke the corresponding method to perform actions. 
     private void addActionListeners() {
         add.addActionListener(new ActionListener() {
@@ -118,6 +121,7 @@ public class MusicLibraryGUI extends JFrame{
         });
     }
 
+    // MODIFIES: this
     // EFFECTS: display the available songs in the music library
     private void addHelper() {
         frame = new JFrame("Songs in Music Library");
@@ -130,8 +134,17 @@ public class MusicLibraryGUI extends JFrame{
         addActionListenersForAdd();
     }
 
+    // MODIFIES: this
     // EFFECTS: add action listner for each JButton object of adding.
     private void addActionListenersForAdd() {
+        for (JButton button : songButtons) {
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    
+                }    
+            });
+        }
         previousPage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
