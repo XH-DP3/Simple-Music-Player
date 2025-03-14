@@ -1,4 +1,4 @@
-package ui.ConsoleBased;
+package ui.console;
 
 import java.io.IOException;
 import java.util.*;
@@ -53,11 +53,11 @@ public class SongListPanel {
 
     // EFFECTS: a helper method that set melody files path of the songs
     private void setMelodyFiles() {
-        s1.setMelodyFilepath(path1);
-        s2.setMelodyFilepath(path2);
-        s3.setMelodyFilepath(path3);
-        s4.setMelodyFilepath(path4);
-        s5.setMelodyFilepath(path5);
+        s1.setMelodyFilePath(path1);
+        s2.setMelodyFilePath(path2);
+        s3.setMelodyFilePath(path3);
+        s4.setMelodyFilePath(path4);
+        s5.setMelodyFilePath(path5);
     }
 
     // EFFECTS: a helper method taht add songs to some lists 

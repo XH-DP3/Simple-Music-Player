@@ -141,7 +141,13 @@ public class TestSong {
 
     @Test
     public void testSetMelodyFilePath() {
-        mySong.setMelodyFilepath("ATestFilePath");
-        assertEquals("ATestFilePath", mySong.getMeolodyFilePath());
+        mySong.setMelodyFilePath("ATestFilePath");
+        assertEquals("ATestFilePath", mySong.getMelodyFilePath());
+    }
+
+    @Test
+    public void testSetImageFilePath() {
+        mySong.setImageFilePath("A file path");
+        assertEquals("A file path", mySong.getImageFilePath());
     }
 }

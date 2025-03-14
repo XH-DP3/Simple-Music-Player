@@ -1,4 +1,4 @@
-package ui.ConsoleBased;
+package ui.console;
 
 import java.io.IOException;
 import java.util.Arrays;

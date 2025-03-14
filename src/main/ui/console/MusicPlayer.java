@@ -1,4 +1,4 @@
-package ui.ConsoleBased;
+package ui.console;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -42,7 +42,7 @@ public class MusicPlayer {
     // reset, and quit.
     public void playHelper() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
         try (Scanner in = new Scanner(System.in);
-                AudioInputStream stream = AudioSystem.getAudioInputStream(new File(mySong.getMeolodyFilePath()))) {
+                AudioInputStream stream = AudioSystem.getAudioInputStream(new File(mySong.getMelodyFilePath()))) {
             int input = -1;
             clip = AudioSystem.getClip();
             clip.open(stream);
@@ -78,7 +78,7 @@ public class MusicPlayer {
 
     // EFFECTS: play the music when the game is starting
     public void playForGame() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-        try (AudioInputStream stream = AudioSystem.getAudioInputStream(new File(mySong.getMeolodyFilePath()))) {
+        try (AudioInputStream stream = AudioSystem.getAudioInputStream(new File(mySong.getMelodyFilePath()))) {
             clip = AudioSystem.getClip();
             clip.open(stream);
             play();

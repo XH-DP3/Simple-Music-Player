@@ -6,19 +6,18 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 // Represents the main menu with options that the user can select
-public class MainMenuGUI extends JFrame{
+public class MainMenuGUI extends JFrame {
     private JFrame frame;
     private JButton musicLibrary;
     private JButton songList;
     private JButton favoriteList;
     private JButton reload;
     private JButton quit;
-    private MusicLibraryGUI musicLibraryGUI = new MusicLibraryGUI(this);
-    private SongListGUI songListGUI = new SongListGUI(this, musicLibraryGUI);
+    private SongListGUI songListGUI = new SongListGUI(this);
+    private MusicLibraryGUI musicLibraryGUI = new MusicLibraryGUI(this, songListGUI);
 
     // EFFECTS: contruct the main menu panel by invoking it
     public MainMenuGUI() {
@@ -31,7 +30,7 @@ public class MainMenuGUI extends JFrame{
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(500, 200);
         frame.setLocationRelativeTo(null);
-	    frame.setVisible(true);
+        frame.setVisible(true);
     }
 
     // EFFECTS: display the main menu panel
@@ -49,7 +48,7 @@ public class MainMenuGUI extends JFrame{
         favoriteList = new JButton("Check your favorite song list");
         reload = new JButton("Reload your saved lists");
         quit = new JButton("Quit the program");
-	    frame.add(musicLibrary);
+        frame.add(musicLibrary);
         frame.add(songList);
         frame.add(favoriteList);
         frame.add(reload);
@@ -60,25 +59,26 @@ public class MainMenuGUI extends JFrame{
     private void addActionListeners() {
         musicLibrary.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { 
-                frame.dispose(); 
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
                 handleMusicLibraryClicked();
             }
         });
         songList.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {    
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
                 handleSongListClicked();
             }
         });
         favoriteList.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { 
-                frame.dispose();   
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
                 handleFavoriteListClicked();
             }
         });
-    } 
+    }
 
     // EFFECTS: handle the case when music library button is clicked
     private void handleMusicLibraryClicked() {
