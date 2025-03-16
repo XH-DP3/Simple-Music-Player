@@ -3,18 +3,15 @@ package ui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import model.SongList;
-import persistence.JsonWriter;
 
 // Represents the main menu with options that the user can select
 public class MainMenuGUI extends JFrame {
@@ -24,6 +21,7 @@ public class MainMenuGUI extends JFrame {
     private JFrame frame;
     private SongListGUI songListGUI;
     private MusicLibraryGUI musicLibraryGUI;
+    private PersistentGUI persistentGUI;
     private Map<String, JButton> buttons;
 
     // MODIFIES: this
@@ -31,6 +29,7 @@ public class MainMenuGUI extends JFrame {
     public MainMenuGUI() {
         songListGUI = new SongListGUI(this);
         musicLibraryGUI = new MusicLibraryGUI(this, songListGUI);
+        persistentGUI = new PersistentGUI(songListGUI);
         buttons = new HashMap<>();
         mainMenu();
     }
@@ -43,6 +42,17 @@ public class MainMenuGUI extends JFrame {
         frame.setSize(500, 200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    // EFFECTS: add an action listerner for menu button and return to the main menu
+    private void addMenu() {
+        buttons.get("menu").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                mainMenu();
+            }
+        });
     }
 
     // MODIFIES: this
@@ -111,6 +121,13 @@ public class MainMenuGUI extends JFrame {
                 quitHelper();
             }
         });
+        buttons.get("reload").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                reloadHelper();
+            }
+        });
     }
 
     // EFFECTS: provide options to save the progress when the user click on the quit
@@ -125,6 +142,7 @@ public class MainMenuGUI extends JFrame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: display the save page and provide options of objects which can be
     // saved
     private void saveHelper() {
@@ -137,30 +155,58 @@ public class MainMenuGUI extends JFrame {
         frame.add(menu);
         layout(frame, 2, 1);
         addSaveActionListeners();
+        addMenu();
     }
 
-    // EFFECTS: add action listeners for saving and invoke writeToFile() method to perform saving
+    // EFFECTS: add action listeners for saving and invoke writeToFile() method to
+    // perform saving
     private void addSaveActionListeners() {
         buttons.get("saveSongList").addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                writeToFile(SONG_LIST_PATH, songListGUI.getSongList());
-                JOptionPane.showMessageDialog(null, "Your song list is saved", "Message",
-                        JOptionPane.INFORMATION_MESSAGE);
-                System.exit(1);
+                if (songListGUI.getSongList().getSize() > 0) {
+                    persistentGUI.writeToFile(SONG_LIST_PATH, songListGUI.getSongList());
+                    JOptionPane.showMessageDialog(null, "Your song list is saved", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(1);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Your song list is empty", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    mainMenu();
+                }
             }
         });
     }
 
-    // EFFECTS: write list to filepath
-    private void writeToFile(String filePath, SongList list) {
-        JsonWriter writer = new JsonWriter(filePath);
-        try {
-            writer.open();
-            writer.write(list);
-            writer.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    // MODIFIES: this
+    // EFFECTS: display the reload page and provide options of objects which can be
+    // reloaded
+    private void reloadHelper() {
+        frame = new JFrame("Reload Helper");
+        JButton reloadSongList = new JButton("Reload your saved song list");
+        JButton menu = new JButton("Return to the menu");
+        buttons.put("reloadSongList", reloadSongList);
+        buttons.put("menu", menu);
+        frame.add(reloadSongList);
+        frame.add(menu);
+        layout(frame, 2, 1);
+        addReloadActionListeners();
+        addMenu();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: add action listeners for reload
+    private void addReloadActionListeners() {
+        buttons.get("reloadSongList").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SongList mySongList = persistentGUI.reloadFromFile(SONG_LIST_PATH);
+                persistentGUI.askMerge(mySongList);
+                JOptionPane.showMessageDialog(null, "Reload is done", "Message", JOptionPane.INFORMATION_MESSAGE);
+                frame.dispose();
+                mainMenu();
+            }
+        });
     }
 }

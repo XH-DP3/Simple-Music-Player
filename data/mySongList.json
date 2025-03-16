@@ -1,18 +1,8 @@
-{"Your song list: ": [
-    {
-        "Record: ": 850,
-        "Playing times: ": 1,
-        "Title: ": "Like I Do",
-        "Duration: ": 149,
-        "Author: ": "J.Tajor",
-        "Genre: ": "R&B"
-    },
-    {
-        "Record: ": 0,
-        "Playing times: ": 0,
-        "Title: ": "Payphone",
-        "Duration: ": 231,
-        "Author: ": "Maroon 5",
-        "Genre: ": "Pop"
-    }
-]}
+{"Your song list: ": [{
+    "Record: ": 0,
+    "Playing times: ": 0,
+    "Title: ": "Payphone",
+    "Duration: ": 231,
+    "Author: ": "Maroon 5",
+    "Genre: ": "Pop"
+}]}

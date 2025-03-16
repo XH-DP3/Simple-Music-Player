@@ -112,12 +112,12 @@ public class SongListGUI {
                 printSongInfo(s);
             }
             createButtons();
+            addSongListActionListeners();
         }
         JButton menu = new JButton("Return to the menu");
         frame.add(menu);
         buttons.put("menu", menu);
         layout(frame, mySongList.getSize() + 6, 1, 1000, 700);
-        addSongListActionListeners();
         addMenu();
     }
 
@@ -261,7 +261,7 @@ public class SongListGUI {
         frame.add(fromHighest);
         frame.add(previous);
         frame.add(menu);
-        layout(frame,4, 1, 500, 500);
+        layout(frame, 4, 1, 500, 500);
         addSortingActionListeners();
         addMenu();
         addPrevious();
@@ -284,5 +284,23 @@ public class SongListGUI {
                 songList();
             }
         });
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if merge is true, merge current song list with list. Otherwise, do
+    // nothing
+    public void merge(SongList list, boolean merge) {
+        if (merge) {
+            if (mySongList.getSize() > 0) {
+                JOptionPane.showMessageDialog(null, "Your previous list and list will be merged", "Message",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            for (Song s : list.getSongs()) {
+                mySongList.addSong(s);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Your previous list will be preserved", "Message",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
