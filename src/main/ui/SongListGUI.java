@@ -27,7 +27,6 @@ public class SongListGUI {
     private MainMenuGUI mainMenuGUI;
     private JFrame frame;
     private JLabel label;
-    private JButton sort;
     private Map<JCheckBox, Song> mapSongs;
     private Map<String, JButton> buttons;
 
@@ -41,10 +40,10 @@ public class SongListGUI {
     }
 
     // EFFECTS: a helper method that will generate the layout
-    private void layout(JFrame frame, int row, int col) {
+    private void layout(JFrame frame, int row, int col, int width, int height) {
         frame.setLayout(new GridLayout(row, col));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1000, 700);
+        frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -109,25 +108,19 @@ public class SongListGUI {
         JButton menu = new JButton("Return to the menu");
         frame.add(menu);
         buttons.put("menu", menu);
-        layout(frame, mySongList.getSize() + 6, 1);
-        addActionListeners();
-        addMoreActionListeners();
+        layout(frame, mySongList.getSize() + 6, 1, 1000, 700);
+        addSongListActionListeners();
+        addMenu();
     }
 
     // MODIFIES: this
-    // EFFECTS: add action listener for each JButton object and will invoke the
+    // EFFECTS: add action listener for the song list page and will invoke the
     // corresponding method to perform actions.
-    private void addActionListeners() {
+    private void addSongListActionListeners() {
         buttons.get("deletePage").addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 deleteHelper();
-            }
-        });
-        buttons.get("delete").addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                delete();
             }
         });
         buttons.get("add").addActionListener(new ActionListener() {
@@ -136,12 +129,39 @@ public class SongListGUI {
                 songList();
             }
         });
+        buttons.get("sort").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                sortHelper();
+            }
+        });
     }
 
     // MODIFIES: this
     // EFFECTS: add more action listener for each JButton object and will invoke the
     // corresponding method to perform actions.
-    private void addMoreActionListeners() {
+    private void addDeleteActionListeners() {
+        buttons.get("delete").addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                delete();
+            }
+        });
+    }
+
+    // EFFECTS: add an action listener for menu button
+    private void addMenu() {
+        buttons.get("menu").addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                mainMenu();
+            }
+        });
+    }
+
+    // EFFECTS: add an action listener for previous button
+    private void addPrevious() {
         buttons.get("previous").addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,18 +169,6 @@ public class SongListGUI {
                 songList();
             }
         });
-        buttons.get("menu").addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                mainMenu();
-            }
-        });
-        // sort.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         sortHelper();
-        //     }
-        // });
     }
 
     // EFFECTS: return to the main menu
@@ -172,8 +180,7 @@ public class SongListGUI {
     // EFFECTS: display songs in the songlist as buttons and click on
     private void deleteHelper() {
         if (mySongList.getSize() == 0) {
-            JOptionPane.showMessageDialog(frame, "Your song list has no songs!");
-            songList();
+            emptyList();
         }
         frame = new JFrame("Songs in your song list");
         label = new JLabel("Please select the songs you want to delete");
@@ -191,9 +198,16 @@ public class SongListGUI {
         frame.add(delete);
         frame.add(previous);
         frame.add(menu);
-        layout(frame, mySongList.getSize() + 4, 1);
-        addActionListeners();
-        addMoreActionListeners();
+        layout(frame, mySongList.getSize() + 4, 1, 1000, 700);
+        addDeleteActionListeners();
+        addPrevious();
+        addMenu();
+    }
+
+    // EFFECTS: display a message that the song list is empty.
+    private void emptyList() {
+        JOptionPane.showMessageDialog(frame, "Your song list has no songs!");
+        songList();
     }
 
     // MODIFIES: this
@@ -224,11 +238,41 @@ public class SongListGUI {
     // MODIFIES: this
     // EFFECTS: provide options to user of how they like the songs to be sorted
     private void sortHelper() {
+        frame = new JFrame("Sorting Helper");
         JButton fromLowest = new JButton("Sort the songs from the lowest duration");
         JButton fromHighest = new JButton("Sort the songs from the highest duration");
-        frame = new JFrame("Sorting Helper");
+        JButton previous = new JButton("Return to the previous page");
+        JButton menu = new JButton("Return to the menu");
+        buttons.put("fromLowest", fromLowest);
+        buttons.put("fromHighest", fromHighest);
+        buttons.put("previous", previous);
+        buttons.put("menu", menu);
         frame.add(fromLowest);
         frame.add(fromHighest);
-        addMoreActionListeners();
+        frame.add(previous);
+        frame.add(menu);
+        layout(frame,4, 1, 500, 500);
+        addSortingActionListeners();
+        addMenu();
+        addPrevious();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: invoke the corresponding methods to perform sorting action.
+    private void addSortingActionListeners() {
+        buttons.get("fromLowest").addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mySongList.sortByLowestDuration();
+                frame.dispose();
+                songList();
+            }
+        });
+        buttons.get("fromHighest").addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mySongList.sortByHighestDuration();
+                frame.dispose();
+                songList();
+            }
+        });
     }
 }
