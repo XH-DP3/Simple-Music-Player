@@ -41,6 +41,7 @@ public class MusicLibraryGUI extends JFrame {
         addDefaultSongs();
     }
 
+    // MODIFIES: this
     // EFFECTS: add the default songs to the music library
     private void addDefaultSongs() {
         Song s1 = new Song("Payphone", "Maroon 5", "Pop", 231);
@@ -60,6 +61,7 @@ public class MusicLibraryGUI extends JFrame {
         s5.setImageFilePath("data/Cover_Like I Do.jpg");
     }
 
+    // MODIFIES: this
     // EFFECTS: a helper method that will generate the layout
     private void layout(JFrame frame, int row, int col) {
         frame.setLayout(new GridLayout(row, col));
@@ -138,6 +140,7 @@ public class MusicLibraryGUI extends JFrame {
         addActionListeners();
     }
 
+    // MODIFIES: this
     // EFFECTS: generating JButton for song and return the JButton
     private void generateJButtonForSongs(SongList musicLibrary) {
         label = new JLabel("Click on the button to add song to your song list");
@@ -177,6 +180,7 @@ public class MusicLibraryGUI extends JFrame {
         });
     }
 
+    // MODIFIES: this
     // EFFECTS: add song to the song list
     private void addSongToSongList(JButton button) {
         Song mySong = mapSongs.get(button);

@@ -39,6 +39,7 @@ public class SongListGUI {
         this.mainMenuGUI = mainMenuGUI;
     }
 
+    // MODIFIES: this
     // EFFECTS: a helper method that will generate the layout
     private void layout(JFrame frame, int row, int col, int width, int height) {
         frame.setLayout(new GridLayout(row, col));
@@ -56,6 +57,7 @@ public class SongListGUI {
                 + "   Is Favorite: " + mySong.isFavorite();
     }
 
+    // MODIFIES: this
     // EFFECTS: print song info
     private void printSongInfo(Song mySong) {
         JPanel panel = new JPanel();
@@ -70,6 +72,7 @@ public class SongListGUI {
         frame.add(panel);
     }
 
+    // MODIFIES: this
     // EFFECTS: create the buttons for the song list panel
     private void createButtons() {
         JButton add = new JButton("Add song to your favorite list");
@@ -139,17 +142,6 @@ public class SongListGUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: add more action listener for each JButton object and will invoke the
-    // corresponding method to perform actions.
-    private void addDeleteActionListeners() {
-        buttons.get("delete").addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                delete();
-            }
-        });
-    }
-
     // EFFECTS: add an action listener for menu button
     private void addMenu() {
         buttons.get("menu").addActionListener(new ActionListener() {
@@ -160,6 +152,7 @@ public class SongListGUI {
         });
     }
 
+    // MODIFIES: this
     // EFFECTS: add an action listener for previous button
     private void addPrevious() {
         buttons.get("previous").addActionListener(new ActionListener() {
@@ -202,6 +195,18 @@ public class SongListGUI {
         addDeleteActionListeners();
         addPrevious();
         addMenu();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: add more action listener for each JButton object and will invoke the
+    // corresponding method to perform actions.
+    private void addDeleteActionListeners() {
+        buttons.get("delete").addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                delete();
+            }
+        });
     }
 
     // EFFECTS: display a message that the song list is empty.
