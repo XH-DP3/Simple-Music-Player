@@ -67,6 +67,10 @@ public class JsonReader {
         int record = jsonObject.getInt("Record: ");
         int playTimes = jsonObject.getInt("Playing times: ");
         Song mySong = new Song(title, author, genre, duration);
+        if (jsonObject.has("Image: ")) {
+            String imageFilePath = jsonObject.getString("Image: ");
+            mySong.setImageFilePath(imageFilePath);
+        }
         mySong.updateRecord(record);
         mySong.updatePlayingTimes(playTimes);
         mySongList.addSong(mySong);

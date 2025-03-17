@@ -54,6 +54,7 @@ public class TestJsonWriter {
             writer.open();
             SongList mySongList = new SongList();
             Song s1 = new Song("Payphone", "Maroon 5", "Pop", 231);
+            s1.setImageFilePath("aFilePath");
             Song s2 = new Song("Everybody Hurts", "Avril Lavigne", "Pop", 221);
             mySongList.addSong(s1);
             mySongList.addSong(s2);

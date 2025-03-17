@@ -42,6 +42,7 @@ public class TestJsonReader {
             assertEquals(mySongList.getSize(), 2);
             assertEquals("Payphone", mySongList.getSongs().get(0).getTitle());
             assertEquals("Everybody Hurts", mySongList.getSongs().get(1).getTitle());
+            assertEquals("aFilePath", mySongList.getSongs().get(0).getImageFilePath());
         } catch (IOException e) {
             fail("IOException is not expected!");
         }

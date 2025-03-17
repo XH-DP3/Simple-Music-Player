@@ -292,14 +292,14 @@ public class SongListGUI {
     public void merge(SongList list, boolean merge) {
         if (merge) {
             if (mySongList.getSize() > 0) {
-                JOptionPane.showMessageDialog(null, "Your previous list and list will be merged", "Message",
+                JOptionPane.showMessageDialog(null, "Your previous list and current list will be merged", "Message",
                         JOptionPane.INFORMATION_MESSAGE);
             }
             for (Song s : list.getSongs()) {
                 mySongList.addSong(s);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Your previous list will be preserved", "Message",
+            JOptionPane.showMessageDialog(null, "Your current list will be preserved", "Message",
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }

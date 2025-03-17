@@ -1,8 +1,20 @@
-{"Your song list: ": [{
-    "Record: ": 0,
-    "Playing times: ": 0,
-    "Title: ": "Payphone",
-    "Duration: ": 231,
-    "Author: ": "Maroon 5",
-    "Genre: ": "Pop"
-}]}
+{"Your song list: ": [
+    {
+        "Record: ": 0,
+        "Playing times: ": 0,
+        "Title: ": "Payphone",
+        "Duration: ": 231,
+        "Author: ": "Maroon 5",
+        "Genre: ": "Pop",
+        "Image: ": "data/Maroon_5_Payphone_cover.png"
+    },
+    {
+        "Record: ": 0,
+        "Playing times: ": 0,
+        "Title: ": "Whataya Want from Me",
+        "Duration: ": 227,
+        "Author: ": "Adam Lambert",
+        "Genre: ": "Pop",
+        "Image: ": "data/Cover_Whataya Want from Me.jpeg"
+    }
+]}

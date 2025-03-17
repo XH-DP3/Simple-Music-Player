@@ -198,6 +198,9 @@ public class Song implements Writable {
         json.put("Duration: ", getDuration());
         json.put("Record: ", getRecord());
         json.put("Playing times: ", getPlayingTimes());
+        if (getImageFilePath() != null) {
+            json.put("Image: ", getImageFilePath());
+        }
         return json;
     }
 

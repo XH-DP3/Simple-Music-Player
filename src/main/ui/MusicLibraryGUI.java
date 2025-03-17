@@ -25,6 +25,7 @@ public class MusicLibraryGUI extends JFrame {
     private JLabel label;
     private MainMenuGUI mainMenuGUI;
     private SongListGUI songListGUI;
+    private MusicPlayerGUI musicPlayerGUI;
     private ArrayList<JButton> songButtons;
     private Map<JButton, Song> mapSongs;
     private Map<String, JButton> buttons;
@@ -34,6 +35,7 @@ public class MusicLibraryGUI extends JFrame {
     public MusicLibraryGUI(MainMenuGUI mainMenuGUI, SongListGUI songListGUI) {
         this.mainMenuGUI = mainMenuGUI;
         this.songListGUI = songListGUI;
+        musicPlayerGUI = new MusicPlayerGUI(mainMenuGUI, this);
         musicLibrary = new SongList();
         songButtons = new ArrayList<>();
         mapSongs = new HashMap<>();
@@ -54,16 +56,26 @@ public class MusicLibraryGUI extends JFrame {
         musicLibrary.addSong(s3);
         musicLibrary.addSong(s4);
         musicLibrary.addSong(s5);
+        setFilePath(s1, s2, s3, s4, s5);
+    }
+
+    //Set the default melody and image filepath.
+    private void setFilePath(Song s1, Song s2, Song s3, Song s4, Song s5) {
         s1.setImageFilePath("data/Maroon_5_Payphone_cover.png");
         s2.setImageFilePath("data/Cover_Everybody Hurts.png");
         s3.setImageFilePath("data/Cover_Innocence.jpeg");
         s4.setImageFilePath("data/Cover_Whataya Want from Me.jpeg");
         s5.setImageFilePath("data/Cover_Like I Do.jpg");
+        s1.setMelodyFilePath("data/21 Payphone.wav");
+        s2.setMelodyFilePath("data/08 Everybody Hurts.wav");
+        s3.setMelodyFilePath("data/08 Innocence.wav");
+        s4.setMelodyFilePath("data/03 Whataya Want from Me.wav");
+        s5.setMelodyFilePath("data/01 Like I Do (with sunkis).wav");
     }
 
     // MODIFIES: this
     // EFFECTS: a helper method that will generate the layout
-    private void layout(JFrame frame, int row, int col) {
+    public void layout(JFrame frame, int row, int col) {
         frame.setLayout(new GridLayout(row, col));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
@@ -102,13 +114,17 @@ public class MusicLibraryGUI extends JFrame {
             printSongInfo(mySong);
         }
         JButton add = new JButton("Add song to your song list");
+        JButton play = new JButton("Play song");
         JButton mainMenu = new JButton("Return to the main menu");
         buttons.put("add", add);
+        buttons.put("play", play);
         buttons.put("mainMenu", mainMenu);
         frame.add(add);
+        frame.add(play);
         frame.add(mainMenu);
-        layout(frame, 9, 1);
+        layout(frame, 10, 1);
         addActionListeners();
+        menu();
     }
 
     // MODIFIES: this
@@ -116,14 +132,23 @@ public class MusicLibraryGUI extends JFrame {
     // corresponding method to perform actions.
     private void addActionListeners() {
         buttons.get("add").addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 addHelper();
             }
         });
+        buttons.get("play").addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                musicPlayerGUI.playHelper(musicLibrary);
+            }
+        });
+    }
+    
+    // MODIFIES: this
+    // EFFECTS: return to the main menu
+    public void menu() {
         buttons.get("mainMenu").addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 mainMenuGUI.mainMenu();
@@ -138,6 +163,7 @@ public class MusicLibraryGUI extends JFrame {
         generateJButtonForSongs(musicLibrary);
         addActionListenersForAdd();
         addActionListeners();
+        menu();
     }
 
     // MODIFIES: this
@@ -145,12 +171,7 @@ public class MusicLibraryGUI extends JFrame {
     private void generateJButtonForSongs(SongList musicLibrary) {
         label = new JLabel("Click on the button to add song to your song list");
         frame.add(label);
-        for (Song s : musicLibrary.getSongs()) {
-            JButton button = new JButton(displaySong(s));
-            mapSongs.put(button, s);
-            songButtons.add(button);
-            frame.add(button);
-        }
+        generateSongButtons(frame, musicLibrary, mapSongs);
         JButton previousPage = new JButton("Return to the previous page");
         JButton mainMenu = new JButton("Return to the main menu");
         buttons.put("previousPage", previousPage);
@@ -158,6 +179,16 @@ public class MusicLibraryGUI extends JFrame {
         frame.add(previousPage);
         frame.add(mainMenu);
         layout(frame, musicLibrary.getSize() + 3, 1);
+    }
+
+    // MODIFIES: this
+    public void generateSongButtons(JFrame frame, SongList list, Map<JButton, Song> mapSongs) {
+        for (Song s : list.getSongs()) {
+            JButton button = new JButton(displaySong(s));
+            mapSongs.put(button, s);
+            songButtons.add(button);
+            frame.add(button);
+        }
     }
 
     // MODIFIES: this

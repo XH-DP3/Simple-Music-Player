@@ -15,9 +15,7 @@ import model.SongList;
 
 // Represents the main menu with options that the user can select
 public class MainMenuGUI extends JFrame {
-    private static final String MUSIC_LIBRARY_PATH = "data/musicLibrary.json";
     private static final String SONG_LIST_PATH = "data/mySongList.json";
-    private static final String FAVORITE_LIST_PATH = "data/myFavoriteSongList.json";
     private JFrame frame;
     private SongListGUI songListGUI;
     private MusicLibraryGUI musicLibraryGUI;
