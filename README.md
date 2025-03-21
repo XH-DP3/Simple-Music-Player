@@ -30,8 +30,8 @@ A music rhythm game that provides several built-in music with different levels o
 - You can play the music by going to either the music library or one of your song lists and clicking the "play song" button. You can control the state of the song by clicking the buttons presented in the music player panel after selecting the song.
 
 ## Image Citation
-https://en.wikipedia.org/wiki/Payphone_(song)
-https://avrillavigne.fandom.com/wiki/Everybody_Hurts
-https://open.spotify.com/track/5OuP08bgU2H7ZeDQQFQ6q8
-https://open.spotify.com/album/57arTya5WF8bnNtKSENgRJ
-https://www.deezer.com/us/album/530941612
+- https://en.wikipedia.org/wiki/Payphone_(song)
+- https://avrillavigne.fandom.com/wiki/Everybody_Hurts
+- https://open.spotify.com/track/5OuP08bgU2H7ZeDQQFQ6q8
+- https://open.spotify.com/album/57arTya5WF8bnNtKSENgRJ
+- https://www.deezer.com/us/album/530941612
