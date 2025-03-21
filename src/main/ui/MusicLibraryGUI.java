@@ -59,7 +59,8 @@ public class MusicLibraryGUI extends JFrame {
         setFilePath(s1, s2, s3, s4, s5);
     }
 
-    //Set the default melody and image filepath.
+    // MODIFIES: this
+    // EFFECTS: Set the default melody and image filepath.
     private void setFilePath(Song s1, Song s2, Song s3, Song s4, Song s5) {
         s1.setImageFilePath("data/Maroon_5_Payphone_cover.png");
         s2.setImageFilePath("data/Cover_Everybody Hurts.png");
@@ -144,7 +145,7 @@ public class MusicLibraryGUI extends JFrame {
             }
         });
     }
-    
+
     // MODIFIES: this
     // EFFECTS: return to the main menu
     public void menu() {

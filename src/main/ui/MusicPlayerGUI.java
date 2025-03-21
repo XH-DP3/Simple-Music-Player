@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import model.Song;
 import model.SongList;
 
+// Represent a music player that can play song
 public class MusicPlayerGUI {
     private Clip clip;
     private JFrame frame;
@@ -31,12 +32,17 @@ public class MusicPlayerGUI {
     private JButton menu;
     private SongList list;
 
+    // MODIFIES: this
+    // EFFECTS: construct a music player with a reference to the main menu and music
+    // library.
     public MusicPlayerGUI(MainMenuGUI mainMenuGUI, MusicLibraryGUI musicLibraryGUI) {
         this.mainMenuGUI = mainMenuGUI;
         this.musicLibraryGUI = musicLibraryGUI;
         mapSongs = new HashMap<>();
     }
 
+    // MODIFIES: this
+    // EFFECTS: displaying songs in your list and let user select a song to play
     public void playHelper(SongList list) {
         this.list = list;
         frame = new JFrame("Play Helper");
@@ -50,6 +56,8 @@ public class MusicPlayerGUI {
         addMenu();
     }
 
+    // MODIFIES: this
+    // EFFECTS: add an action listerner for each song
     private void addSongButtonsActionListeners() {
         for (JButton button : mapSongs.keySet()) {
             button.addActionListener(new ActionListener() {
@@ -66,6 +74,8 @@ public class MusicPlayerGUI {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: return to the menu if user click on the menu button
     private void addMenu() {
         menu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -75,6 +85,8 @@ public class MusicPlayerGUI {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: display the buttons which control the song.
     private void playSongHelper(JButton button) throws Exception {
         frame = new JFrame("Music Player");
         Song mySong = mapSongs.get(button);
@@ -98,6 +110,8 @@ public class MusicPlayerGUI {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: adding buttons when user is playing the music
     private void addPlayButtons() {
         play = new JButton("Play");
         pause = new JButton("Pause");
@@ -105,6 +119,9 @@ public class MusicPlayerGUI {
         close = new JButton("Close");
     }
 
+    // MODIFIES: this
+    // EFFECTS: adding action listeners for each button when user wants to play the
+    // song
     private void addPlayActionListeners() {
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -123,6 +140,8 @@ public class MusicPlayerGUI {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: adding close music player and return previous page fuctionality/
     private void addCloseAndPrevious() {
         close.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

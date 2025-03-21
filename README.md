@@ -28,3 +28,10 @@ A music rhythm game that provides several built-in music with different levels o
 - You can save the state of my application by clicking on the "Quit the program" button in the main menu. There will be a window pop out and ask you whether you would like to save your progress. If you click "yes,” then you can select the list you wish to save.
 - You can reload the state of my application by restarting the program and clicking on the "Reload your saved lists" button in the main menu. You can select the song list you wish to reload. If your current song list is not empty, then a window will pop out and ask you whether you wish to merge your previous saved song list and your current song list. If yes, then your two song lists will be merged, and otherwise, your current song list will be preserved.
 - You can play the music by going to either the music library or one of your song lists and clicking the "play song" button. You can control the state of the song by clicking the buttons presented in the music player panel after selecting the song.
+
+## Image Citation
+-https://upload.wikimedia.org/wikipedia/en/7/7f/Maroon_5_Payphone_cover.png
+-https://static.wikia.nocookie.net/avrillavigne/images/1/15/COVER_-_GoodbyeLullaby.jpg/revision/latest?cb=20220324172722
+-https://i.scdn.co/image/ab67616d0000b273476cdf5837ae39eee951cc15
+-https://i.scdn.co/image/ab67616d0000b273b7a80d16a22f63de5cabda4c
+-https://cdn-images.dzcdn.net/images/cover/417ec563fe0f4090350e8e1929250ea9/0x1900-000000-80-0-0.jpg

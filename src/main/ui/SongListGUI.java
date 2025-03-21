@@ -25,6 +25,7 @@ import model.SongList;
 public class SongListGUI {
     private SongList mySongList;
     private MainMenuGUI mainMenuGUI;
+    private MusicPlayerGUI musicPlayerGUI;
     private JFrame frame;
     private JLabel label;
     private Map<JCheckBox, Song> mapSongs;
@@ -37,6 +38,7 @@ public class SongListGUI {
         mySongList = new SongList();
         buttons = new HashMap<>();
         this.mainMenuGUI = mainMenuGUI;
+        musicPlayerGUI = new MusicPlayerGUI(mainMenuGUI, new MusicLibraryGUI(mainMenuGUI, this));
     }
 
     // MODIFIES: this
@@ -75,17 +77,14 @@ public class SongListGUI {
     // MODIFIES: this
     // EFFECTS: create the buttons for the song list panel
     private void createButtons() {
-        JButton add = new JButton("Add song to your favorite list");
         JButton deletePage = new JButton("Delete song from your song list");
-        JButton markAsFavorite = new JButton("Mark song as favorite");
+        JButton play = new JButton("Play song in your song list");
         JButton sort = new JButton("Sort your song list");
-        frame.add(add);
         frame.add(deletePage);
-        frame.add(markAsFavorite);
+        frame.add(play);
         frame.add(sort);
-        buttons.put("add", add);
         buttons.put("deletePage", deletePage);
-        buttons.put("marksAsFavorite", markAsFavorite);
+        buttons.put("play", play);
         buttons.put("sort", sort);
     }
 
@@ -113,6 +112,7 @@ public class SongListGUI {
             }
             createButtons();
             addSongListActionListeners();
+            addPlay();
         }
         JButton menu = new JButton("Return to the menu");
         frame.add(menu);
@@ -131,17 +131,23 @@ public class SongListGUI {
                 deleteHelper();
             }
         });
-        buttons.get("add").addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                songList();
-            }
-        });
         buttons.get("sort").addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 sortHelper();
+            }
+        });
+    }
+
+    // MODIFIES: this
+    // EFFECTS: add an action listerner for play
+    private void addPlay() {
+        buttons.get("play").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                musicPlayerGUI.playHelper(mySongList);
             }
         });
     }
