@@ -30,8 +30,8 @@ A music rhythm game that provides several built-in music with different levels o
 - You can play the music by going to either the music library or one of your song lists and clicking the "play song" button. You can control the state of the song by clicking the buttons presented in the music player panel after selecting the song.
 
 ## Image Citation
--https://upload.wikimedia.org/wikipedia/en/7/7f/Maroon_5_Payphone_cover.png
--https://static.wikia.nocookie.net/avrillavigne/images/1/15/COVER_-_GoodbyeLullaby.jpg/revision/latest?cb=20220324172722
--https://i.scdn.co/image/ab67616d0000b273476cdf5837ae39eee951cc15
--https://i.scdn.co/image/ab67616d0000b273b7a80d16a22f63de5cabda4c
--https://cdn-images.dzcdn.net/images/cover/417ec563fe0f4090350e8e1929250ea9/0x1900-000000-80-0-0.jpg
+https://en.wikipedia.org/wiki/Payphone_(song)
+https://avrillavigne.fandom.com/wiki/Everybody_Hurts
+https://open.spotify.com/track/5OuP08bgU2H7ZeDQQFQ6q8
+https://open.spotify.com/album/57arTya5WF8bnNtKSENgRJ
+https://www.deezer.com/us/album/530941612
