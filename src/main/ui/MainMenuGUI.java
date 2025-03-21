@@ -58,7 +58,7 @@ public class MainMenuGUI extends JFrame {
     public void mainMenu() {
         frame = new JFrame("Main Menu");
         createButtons();
-        layout(frame, 5, 1);
+        layout(frame, 4, 1);
         addListsActionListeners();
         addPersistentActionListeners();
     }
@@ -68,17 +68,14 @@ public class MainMenuGUI extends JFrame {
     private void createButtons() {
         JButton musicLibrary = new JButton("Check music library");
         JButton songList = new JButton("Check your song list");
-        JButton favoriteList = new JButton("Check your favorite song list");
         JButton reload = new JButton("Reload your saved lists");
         JButton quit = new JButton("Quit the program");
         buttons.put("musicLibrary", musicLibrary);
         buttons.put("songList", songList);
-        buttons.put("favoriteList", favoriteList);
         buttons.put("reload", reload);
         buttons.put("quit", quit);
         frame.add(musicLibrary);
         frame.add(songList);
-        frame.add(favoriteList);
         frame.add(reload);
         frame.add(quit);
     }
@@ -98,13 +95,6 @@ public class MainMenuGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 songListGUI.songList();
-            }
-        });
-        buttons.get("favoriteList").addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                // stub
             }
         });
     }
