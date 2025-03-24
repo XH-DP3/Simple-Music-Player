@@ -35,3 +35,43 @@ A music rhythm game that provides several built-in music with different levels o
 - https://open.spotify.com/track/5OuP08bgU2H7ZeDQQFQ6q8
 - https://open.spotify.com/album/57arTya5WF8bnNtKSENgRJ
 - https://www.deezer.com/us/album/530941612
+
+
+## Phase 4: Task 2
+- Here is a representative sample of the events that occur when the program runs:
+
+Mon Mar 24 15:52:28 PDT 2025
+Default action: Payphone is added to music library
+
+Mon Mar 24 15:52:28 PDT 2025
+Default action: Everybody Hurts is added to music library
+
+Mon Mar 24 15:52:28 PDT 2025
+Default action: Innocence is added to music library
+
+Mon Mar 24 15:52:28 PDT 2025
+Default action: Whataya Want from Me is added to music library
+
+Mon Mar 24 15:52:28 PDT 2025
+Default action: Like I Do is added to music library
+
+Mon Mar 24 15:52:32 PDT 2025
+Payphone is added to song list.
+
+Mon Mar 24 15:52:33 PDT 2025
+Everybody Hurts is added to song list.
+
+Mon Mar 24 15:52:33 PDT 2025
+Whataya Want from Me is added to song list.
+
+Mon Mar 24 15:52:37 PDT 2025
+Song list is sorted by the lowest duration.
+
+Mon Mar 24 15:52:39 PDT 2025
+Song list is sorted by the highest duration.
+
+Mon Mar 24 15:52:43 PDT 2025
+Whataya Want from Me is deleted from song list.
+
+Mon Mar 24 15:52:43 PDT 2025
+Everybody Hurts is deleted from song list.

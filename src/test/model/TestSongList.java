@@ -202,4 +202,10 @@ public class TestSongList {
         list.sortByHighestDuration();
         assertEquals(0, list.getSize());
     }
+
+    @Test
+    public void testAddDefualtSong() {
+        assertTrue(list.addDefaultSong(s1));
+        assertFalse(list.addDefaultSong(s1));
+    }
 }

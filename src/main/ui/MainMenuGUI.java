@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
+import model.EventLog;
 import model.SongList;
 
 // Represents the main menu with options that the user can select
@@ -124,6 +125,8 @@ public class MainMenuGUI extends JFrame {
         int choice = JOptionPane.showConfirmDialog(null,
                 "Would you like to save your progress?", "Quit Options", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.NO_OPTION) {
+            ConsolePrinter printer = new ConsolePrinter();
+            printer.printLog(EventLog.getInstance());
             System.exit(1);
         } else {
             saveHelper();
@@ -156,6 +159,8 @@ public class MainMenuGUI extends JFrame {
                     persistentGUI.writeToFile(SONG_LIST_PATH, songListGUI.getSongList());
                     JOptionPane.showMessageDialog(null, "Your song list is saved", "Message",
                             JOptionPane.INFORMATION_MESSAGE);
+                    ConsolePrinter printer = new ConsolePrinter();
+                    printer.printLog(EventLog.getInstance());
                     System.exit(1);
                 } else {
                     JOptionPane.showMessageDialog(null, "Your song list is empty", "Message",

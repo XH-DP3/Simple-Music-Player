@@ -1,9 +1,11 @@
 package ui;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.WindowConstants;
 
 import model.Song;
 import model.SongList;
@@ -21,9 +24,9 @@ import model.SongList;
 public class MusicPlayerGUI {
     private Clip clip;
     private JFrame frame;
-    private MusicLibraryGUI musicLibraryGUI;
     private MainMenuGUI mainMenuGUI;
     private Map<JButton, Song> mapSongs;
+    private ArrayList<JButton> songButtons;
     private JButton play;
     private JButton pause;
     private JButton reset;
@@ -35,9 +38,8 @@ public class MusicPlayerGUI {
     // MODIFIES: this
     // EFFECTS: construct a music player with a reference to the main menu and music
     // library.
-    public MusicPlayerGUI(MainMenuGUI mainMenuGUI, MusicLibraryGUI musicLibraryGUI) {
+    public MusicPlayerGUI(MainMenuGUI mainMenuGUI) {
         this.mainMenuGUI = mainMenuGUI;
-        this.musicLibraryGUI = musicLibraryGUI;
         mapSongs = new HashMap<>();
     }
 
@@ -48,12 +50,40 @@ public class MusicPlayerGUI {
         frame = new JFrame("Play Helper");
         JLabel label = new JLabel("Please click on the song you want to play");
         frame.add(label);
-        musicLibraryGUI.generateSongButtons(frame, list, mapSongs);
+        generateSongButtons(frame, list, mapSongs);
         menu = new JButton("Return to the menu");
         frame.add(menu);
-        musicLibraryGUI.layout(frame, list.getSize() + 2, 1);
+        layout(frame, list.getSize() + 2, 1);
         addSongButtonsActionListeners();
         addMenu();
+    }
+
+    // MODIFIES: this
+    public void generateSongButtons(JFrame frame, SongList list, Map<JButton, Song> mapSongs) {
+        for (Song s : list.getSongs()) {
+            JButton button = new JButton(displaySong(s));
+            mapSongs.put(button, s);
+            songButtons.add(button);
+            frame.add(button);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: a helper method that will generate the layout
+    public void layout(JFrame frame, int row, int col) {
+        frame.setLayout(new GridLayout(row, col));
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(1000, 700);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    // EFFECTS: return a string representation to display the song
+    private String displaySong(Song mySong) {
+        return "Title: " + mySong.getTitle()
+                + "   Author: " + mySong.getAuthor()
+                + "   Genre: " + mySong.getGenre()
+                + "   Duration: " + mySong.getDuration();
     }
 
     // MODIFIES: this
@@ -102,7 +132,7 @@ public class MusicPlayerGUI {
             frame.add(reset);
             frame.add(close);
             frame.add(previous);
-            musicLibraryGUI.layout(frame, 6, 1);
+            layout(frame, 6, 1);
             addPlayActionListeners();
             addCloseAndPrevious();
         } catch (IOException e) {

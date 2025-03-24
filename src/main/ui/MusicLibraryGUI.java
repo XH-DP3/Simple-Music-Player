@@ -35,7 +35,7 @@ public class MusicLibraryGUI extends JFrame {
     public MusicLibraryGUI(MainMenuGUI mainMenuGUI, SongListGUI songListGUI) {
         this.mainMenuGUI = mainMenuGUI;
         this.songListGUI = songListGUI;
-        musicPlayerGUI = new MusicPlayerGUI(mainMenuGUI, this);
+        musicPlayerGUI = new MusicPlayerGUI(mainMenuGUI);
         musicLibrary = new SongList();
         songButtons = new ArrayList<>();
         mapSongs = new HashMap<>();
@@ -51,11 +51,11 @@ public class MusicLibraryGUI extends JFrame {
         Song s3 = new Song("Innocence", "Avril Lavigne", "Pop", 233);
         Song s4 = new Song("Whataya Want from Me", "Adam Lambert", "Pop", 227);
         Song s5 = new Song("Like I Do", "J.Tajor", "R&B", 149);
-        musicLibrary.addSong(s1);
-        musicLibrary.addSong(s2);
-        musicLibrary.addSong(s3);
-        musicLibrary.addSong(s4);
-        musicLibrary.addSong(s5);
+        musicLibrary.addDefaultSong(s1);
+        musicLibrary.addDefaultSong(s2);
+        musicLibrary.addDefaultSong(s3);
+        musicLibrary.addDefaultSong(s4);
+        musicLibrary.addDefaultSong(s5);
         setFilePath(s1, s2, s3, s4, s5);
     }
 

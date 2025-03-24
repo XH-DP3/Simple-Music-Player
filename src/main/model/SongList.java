@@ -81,7 +81,18 @@ public class SongList implements Writable {
     // EFFECT: add mySong to the end of the list and return true;
     public boolean addSong(Song mySong) {
         if (!isContained(mySong.getTitle())) {
-            EventLog.getInstance().logEvent(new Event(mySong.getTitle() +  " is added to song list."));
+            EventLog.getInstance().logEvent(new Event(mySong.getTitle() + " is added to song list."));
+            return songs.add(mySong);
+        }
+        return false;
+    }
+
+    // MODIFIES: this
+    // EFFECT: add mySong to the end of the list and return true;
+    public boolean addDefaultSong(Song mySong) {
+        if (!isContained(mySong.getTitle())) {
+            EventLog.getInstance()
+                    .logEvent(new Event("Default action: " + mySong.getTitle() + " is added to music library"));
             return songs.add(mySong);
         }
         return false;

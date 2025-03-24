@@ -38,7 +38,7 @@ public class SongListGUI {
         mySongList = new SongList();
         buttons = new HashMap<>();
         this.mainMenuGUI = mainMenuGUI;
-        musicPlayerGUI = new MusicPlayerGUI(mainMenuGUI, new MusicLibraryGUI(mainMenuGUI, this));
+        musicPlayerGUI = new MusicPlayerGUI(mainMenuGUI);
     }
 
     // MODIFIES: this
