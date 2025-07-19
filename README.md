@@ -1,3 +1,5 @@
+#Reminder: This is a copy of the original repo published to CPSC 210 Team
+
 # Rhythm Challenge: Press Your Keys!
 
 ## Feel the music, Feel the Rhythm
@@ -81,4 +83,3 @@ Everybody Hurts is deleted from song list.
 Suppose I have more time to work on the project. In that case, I will make SongListGUI to be a subclass of MusicLibraryGUI to avoid duplicate methods because these two classes have very similar behaviours, which include adding songs, playing songs, and potentially some other functionalities. So, having this structure will follow a good design principle. In addition to this, I will make a separate class that deals with layout and format when displaying songs in each panel. For now, this is done by some methods implemented in each class with similar code, so extracting them and putting them into a separate class could make each class more cohesive.
 
 On the other hand, I may probably make some methods to be static to make sure they can be invoked outside of the class and without instantiating an instance of that type. For example, the main menu panel will be used in almost every page to let the user return to the very beginning page. But because of this, I have a reference of MainMenuGUI in some classes, which increases the level of coupling. When I was working on the project, I also realized that, a small adjustment of a class can make other classes that are associated with it or depend on it to crash. So, the current implementation may not be the best choice. Although I have already separated a single classes into several classes to maintain cohesion, I still need to find a way to minimize coupling.# CPSC-210-Software-Construction-Project
-# CPSC-210-Music-Player-Project
