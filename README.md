@@ -1,4 +1,4 @@
-#Reminder: This is a copy of the original repo published to CPSC 210 Team
+# Reminder: This is a term project of the course, CPSC 210 (Software Construction) of UBC.
 
 # Rhythm Challenge: Press Your Keys!
 
