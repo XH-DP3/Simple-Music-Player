@@ -1,14 +1,25 @@
 package ui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import model.EventLog;
@@ -26,6 +37,7 @@ public class MainMenuGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: contruct the main menu panel by invoking it
     public MainMenuGUI() {
+        setGlobalTheme();
         songListGUI = new SongListGUI(this);
         musicLibraryGUI = new MusicLibraryGUI(this, songListGUI);
         persistentGUI = new PersistentGUI(songListGUI);
@@ -36,11 +48,20 @@ public class MainMenuGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: a helper method that will generate the layout
     private void layout(JFrame frame, int row, int col) {
-        frame.setLayout(new GridLayout(row, col));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(500, 200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: set global UI theme for all pages
+    private void setGlobalTheme() {
+        Font defaultFont = new Font("SansSerif", Font.PLAIN, 15);
+        UIManager.put("Label.font", defaultFont);
+        UIManager.put("Button.font", new Font("SansSerif", Font.BOLD, 14));
+        UIManager.put("Label.foreground", new Color(45, 45, 45));
+        UIManager.put("Button.background", new Color(242, 244, 255));
     }
 
     // EFFECTS: add an action listerner for menu button and return to the main menu
@@ -67,18 +88,32 @@ public class MainMenuGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: create the buttons for the main menu panel
     private void createButtons() {
+        frame.setLayout(new BorderLayout());
         JButton musicLibrary = new JButton("Check music library");
         JButton songList = new JButton("Check your song list");
         JButton reload = new JButton("Reload your saved lists");
         JButton quit = new JButton("Quit the program");
+        JButton[] primaryButtons = { musicLibrary, songList, reload, quit };
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        JLabel heading = new JLabel("Simple Music Player", SwingConstants.CENTER);
+        heading.setFont(new Font("SansSerif", Font.BOLD, 24));
+        heading.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        content.add(heading);
+        content.add(Box.createVerticalStrut(16));
+        for (JButton button : primaryButtons) {
+            button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+            button.setFocusPainted(false);
+            content.add(button);
+            content.add(Box.createVerticalStrut(8));
+        }
         buttons.put("musicLibrary", musicLibrary);
         buttons.put("songList", songList);
         buttons.put("reload", reload);
         buttons.put("quit", quit);
-        frame.add(musicLibrary);
-        frame.add(songList);
-        frame.add(reload);
-        frame.add(quit);
+        frame.add(content, BorderLayout.CENTER);
+        frame.setSize(500, 360);
     }
 
     // MODIFIES: this

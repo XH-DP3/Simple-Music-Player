@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.WindowConstants;
 
 import model.Song;
@@ -62,13 +64,13 @@ public class SongListGUI {
     // MODIFIES: this
     // EFFECTS: print song info
     private void printSongInfo(Song mySong) {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridLayout(1, 2, 12, 0));
+        panel.setBorder(new EmptyBorder(8, 8, 8, 8));
         JLabel songLabel = new JLabel(displaySong(mySong));
         ImageIcon originalIcon = new ImageIcon(mySong.getImageFilePath());
         Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
         JLabel imageLabel = new JLabel(resizedIcon);
-        panel.setLayout(new GridLayout(1, 2));
         panel.add(songLabel);
         panel.add(imageLabel);
         frame.add(panel);
@@ -76,13 +78,13 @@ public class SongListGUI {
 
     // MODIFIES: this
     // EFFECTS: create the buttons for the song list panel
-    private void createButtons() {
+    private void createButtons(JPanel content) {
         JButton deletePage = new JButton("Delete song from your song list");
         JButton play = new JButton("Play song in your song list");
         JButton sort = new JButton("Sort your song list");
-        frame.add(deletePage);
-        frame.add(play);
-        frame.add(sort);
+        content.add(deletePage);
+        content.add(play);
+        content.add(sort);
         buttons.put("deletePage", deletePage);
         buttons.put("play", play);
         buttons.put("sort", sort);
@@ -103,20 +105,35 @@ public class SongListGUI {
     // EFFECTS: invoke the song list page
     public void songList() {
         frame = new JFrame("Your Song List");
+        frame.setLayout(new GridLayout(1, 1));
+        JPanel content = new JPanel();
+        content.setLayout(new GridLayout(Math.max(mySongList.getSize() + 6, 7), 1, 0, 6));
+        content.setBorder(new EmptyBorder(10, 10, 10, 10));
         if (mySongList.getSize() == 0) {
             label = new JLabel("Your song list is empty");
-            frame.add(label);
+            content.add(label);
         } else {
             for (Song s : mySongList.getSongs()) {
-                printSongInfo(s);
+                JPanel panel = new JPanel(new GridLayout(1, 2, 12, 0));
+                panel.setBorder(new EmptyBorder(8, 8, 8, 8));
+                JLabel songLabel = new JLabel(displaySong(s));
+                ImageIcon originalIcon = new ImageIcon(s.getImageFilePath());
+                Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                ImageIcon resizedIcon = new ImageIcon(resizedImage);
+                JLabel imageLabel = new JLabel(resizedIcon);
+                panel.add(songLabel);
+                panel.add(imageLabel);
+                content.add(panel);
             }
-            createButtons();
+            createButtons(content);
             addSongListActionListeners();
             addPlay();
         }
         JButton menu = new JButton("Return to the menu");
-        frame.add(menu);
+        content.add(menu);
         buttons.put("menu", menu);
+        frame.getContentPane().removeAll();
+        frame.add(new JScrollPane(content));
         layout(frame, mySongList.getSize() + 6, 1, 1000, 700);
         addMenu();
     }

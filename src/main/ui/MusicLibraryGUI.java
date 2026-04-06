@@ -1,5 +1,10 @@
 package ui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -13,6 +18,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.WindowConstants;
 
 import model.Song;
@@ -29,6 +36,7 @@ public class MusicLibraryGUI extends JFrame {
     private ArrayList<JButton> songButtons;
     private Map<JButton, Song> mapSongs;
     private Map<String, JButton> buttons;
+    private JPanel contentPanel;
 
     // MODIFIES: this
     // EFFECTS: consturct the music library with default songs
@@ -77,7 +85,6 @@ public class MusicLibraryGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: a helper method that will generate the layout
     public void layout(JFrame frame, int row, int col) {
-        frame.setLayout(new GridLayout(row, col));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
@@ -95,34 +102,44 @@ public class MusicLibraryGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: print the information of the song toghet
     private void printSongInfo(Song mySong) {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout(16, 8));
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panel.setBackground(new Color(250, 251, 255));
         JLabel songLabel = new JLabel(displaySong(mySong));
         ImageIcon originalIcon = new ImageIcon(mySong.getImageFilePath());
         Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
         JLabel imageLabel = new JLabel(resizedIcon);
-        panel.setLayout(new GridLayout(1, 2));
-        panel.add(songLabel);
-        panel.add(imageLabel);
-        frame.add(panel);
+        panel.add(songLabel, BorderLayout.CENTER);
+        panel.add(imageLabel, BorderLayout.EAST);
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 130));
+        contentPanel.add(panel);
     }
 
     // MODIFIES: this
     // EFFECTS: invoke the music library page
     public void musicLibrary() {
         frame = new JFrame("Music Library");
+        frame.setLayout(new BorderLayout());
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.Y_AXIS));
+        contentPanel.setBorder(new EmptyBorder(12, 12, 12, 12));
         for (Song mySong : musicLibrary.getSongs()) {
             printSongInfo(mySong);
         }
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        frame.add(scrollPane, BorderLayout.CENTER);
         JButton add = new JButton("Add song to your song list");
         JButton play = new JButton("Play song");
         JButton mainMenu = new JButton("Return to the main menu");
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
+        controls.add(add);
+        controls.add(play);
+        controls.add(mainMenu);
         buttons.put("add", add);
         buttons.put("play", play);
         buttons.put("mainMenu", mainMenu);
-        frame.add(add);
-        frame.add(play);
-        frame.add(mainMenu);
+        frame.add(controls, BorderLayout.SOUTH);
         layout(frame, 10, 1);
         addActionListeners();
         menu();
@@ -171,24 +188,32 @@ public class MusicLibraryGUI extends JFrame {
     // EFFECTS: generating JButton for song and return the JButton
     private void generateJButtonForSongs(SongList musicLibrary) {
         label = new JLabel("Click on the button to add song to your song list");
-        frame.add(label);
-        generateSongButtons(frame, musicLibrary, mapSongs);
+        label.setBorder(new EmptyBorder(10, 10, 10, 10));
+        frame.setLayout(new BorderLayout());
+        JPanel songPanel = new JPanel();
+        songPanel.setLayout(new javax.swing.BoxLayout(songPanel, javax.swing.BoxLayout.Y_AXIS));
+        songPanel.add(label);
+        generateSongButtons(songPanel, musicLibrary, mapSongs);
+        frame.add(new JScrollPane(songPanel), BorderLayout.CENTER);
         JButton previousPage = new JButton("Return to the previous page");
         JButton mainMenu = new JButton("Return to the main menu");
         buttons.put("previousPage", previousPage);
         buttons.put("mainMenu", mainMenu);
-        frame.add(previousPage);
-        frame.add(mainMenu);
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
+        footer.add(previousPage);
+        footer.add(mainMenu);
+        frame.add(footer, BorderLayout.SOUTH);
         layout(frame, musicLibrary.getSize() + 3, 1);
     }
 
     // MODIFIES: this
-    public void generateSongButtons(JFrame frame, SongList list, Map<JButton, Song> mapSongs) {
+    public void generateSongButtons(JPanel songPanel, SongList list, Map<JButton, Song> mapSongs) {
         for (Song s : list.getSongs()) {
             JButton button = new JButton(displaySong(s));
+            button.setAlignmentX(Component.LEFT_ALIGNMENT);
             mapSongs.put(button, s);
             songButtons.add(button);
-            frame.add(button);
+            songPanel.add(button);
         }
     }
 
