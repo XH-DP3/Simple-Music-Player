@@ -23,19 +23,22 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import model.EventLog;
+import model.RhythmGameHistory;
 import model.SongList;
 
 // Represents the main menu with options that the user can select
 public class MainMenuGUI extends JFrame {
     private static final String SONG_LIST_PATH = "data/mySongList.json";
+    private static final String RHYTHM_HISTORY_PATH = "data/rhythmHistory.json";
     private static final Color PAGE_BG = new Color(236, 241, 248);
     private static final Color CARD_BG = new Color(255, 255, 255);
     private static final Color ACCENT = new Color(30, 104, 176);
     private static final Color BUTTON_TEXT = new Color(24, 34, 49);
-    private static final Color SUBTLE_TEXT = new Color(97, 108, 124);
     private JFrame frame;
     private SongListGUI songListGUI;
     private MusicLibraryGUI musicLibraryGUI;
+    private RhythmGameHistory rhythmGameHistory;
+    private RhythmGameGUI rhythmGameGUI;
     private PersistentGUI persistentGUI;
     private Map<String, JButton> buttons;
 
@@ -45,6 +48,8 @@ public class MainMenuGUI extends JFrame {
         setGlobalTheme();
         songListGUI = new SongListGUI(this);
         musicLibraryGUI = new MusicLibraryGUI(this, songListGUI);
+        rhythmGameHistory = new RhythmGameHistory();
+        rhythmGameGUI = new RhythmGameGUI(this, musicLibraryGUI, rhythmGameHistory);
         persistentGUI = new PersistentGUI(songListGUI);
         buttons = new HashMap<>();
         mainMenu();
@@ -125,6 +130,7 @@ public class MainMenuGUI extends JFrame {
         frame.getContentPane().setBackground(PAGE_BG);
         JButton musicLibrary = new JButton("Check music library");
         JButton songList = new JButton("Check your song list");
+        JButton rhythmGame = new JButton("Play rhythm game");
         JButton reload = new JButton("Reload your saved lists");
         JButton quit = new JButton("Quit the program");
         JPanel content = new JPanel(new BorderLayout());
@@ -136,10 +142,12 @@ public class MainMenuGUI extends JFrame {
         heading.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         Icon musicLibraryIcon = UIManager.getIcon("FileView.directoryIcon");
         Icon songListIcon = UIManager.getIcon("FileView.fileIcon");
+        Icon rhythmGameIcon = UIManager.getIcon("FileView.computerIcon");
         Icon reloadIcon = UIManager.getIcon("FileChooser.upFolderIcon");
         Icon quitIcon = UIManager.getIcon("InternalFrame.closeIcon");
         stylePrimaryButton(musicLibrary, musicLibraryIcon);
         stylePrimaryButton(songList, songListIcon);
+        stylePrimaryButton(rhythmGame, rhythmGameIcon);
         stylePrimaryButton(reload, reloadIcon);
         stylePrimaryButton(quit, quitIcon);
         card.add(heading);
@@ -148,16 +156,19 @@ public class MainMenuGUI extends JFrame {
         card.add(Box.createVerticalStrut(10));
         card.add(songList);
         card.add(Box.createVerticalStrut(10));
+        card.add(rhythmGame);
+        card.add(Box.createVerticalStrut(10));
         card.add(reload);
         card.add(Box.createVerticalStrut(10));
         card.add(quit);
         buttons.put("musicLibrary", musicLibrary);
         buttons.put("songList", songList);
+        buttons.put("rhythmGame", rhythmGame);
         buttons.put("reload", reload);
         buttons.put("quit", quit);
         content.add(card, BorderLayout.CENTER);
         frame.add(content, BorderLayout.CENTER);
-        frame.setSize(640, 460);
+        frame.setSize(640, 520);
     }
 
     // MODIFIES: this
@@ -175,6 +186,13 @@ public class MainMenuGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
                 songListGUI.songList();
+            }
+        });
+        buttons.get("rhythmGame").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                rhythmGameGUI.rhythmGame();
             }
         });
     }
@@ -218,15 +236,25 @@ public class MainMenuGUI extends JFrame {
     private void saveHelper() {
         frame = new JFrame("Save Helper");
         JButton saveSongList = new JButton("Save your song list");
+        JButton saveRhythmHistory = new JButton("Save rhythm game history");
+        JButton saveAll = new JButton("Save all and quit");
         JButton menu = new JButton("Return to the menu");
         buttons.put("saveSongList", saveSongList);
+        buttons.put("saveRhythmHistory", saveRhythmHistory);
+        buttons.put("saveAll", saveAll);
         buttons.put("menu", menu);
         frame.setLayout(new BorderLayout());
         frame.getContentPane().setBackground(PAGE_BG);
         JPanel content = createCardPanel();
         stylePrimaryButton(saveSongList, UIManager.getIcon("FileView.floppyDriveIcon"));
+        stylePrimaryButton(saveRhythmHistory, UIManager.getIcon("FileView.fileIcon"));
+        stylePrimaryButton(saveAll, UIManager.getIcon("FileChooser.newFolderIcon"));
         stylePrimaryButton(menu, UIManager.getIcon("FileChooser.homeFolderIcon"));
         content.add(saveSongList);
+        content.add(Box.createVerticalStrut(10));
+        content.add(saveRhythmHistory);
+        content.add(Box.createVerticalStrut(10));
+        content.add(saveAll);
         content.add(Box.createVerticalStrut(10));
         content.add(menu);
         frame.add(content, BorderLayout.CENTER);
@@ -245,9 +273,7 @@ public class MainMenuGUI extends JFrame {
                     persistentGUI.writeToFile(SONG_LIST_PATH, songListGUI.getSongList());
                     JOptionPane.showMessageDialog(null, "Your song list is saved", "Message",
                             JOptionPane.INFORMATION_MESSAGE);
-                    ConsolePrinter printer = new ConsolePrinter();
-                    printer.printLog(EventLog.getInstance());
-                    System.exit(1);
+                    quitAfterSaving();
                 } else {
                     JOptionPane.showMessageDialog(null, "Your song list is empty", "Message",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -256,6 +282,53 @@ public class MainMenuGUI extends JFrame {
                 }
             }
         });
+        buttons.get("saveRhythmHistory").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rhythmGameHistory.getSize() > 0) {
+                    persistentGUI.writeRhythmHistoryToFile(RHYTHM_HISTORY_PATH, rhythmGameHistory);
+                    JOptionPane.showMessageDialog(null, "Your rhythm history is saved", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    quitAfterSaving();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Your rhythm history is empty", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    mainMenu();
+                }
+            }
+        });
+        buttons.get("saveAll").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean hasAny = false;
+                if (songListGUI.getSongList().getSize() > 0) {
+                    persistentGUI.writeToFile(SONG_LIST_PATH, songListGUI.getSongList());
+                    hasAny = true;
+                }
+                if (rhythmGameHistory.getSize() > 0) {
+                    persistentGUI.writeRhythmHistoryToFile(RHYTHM_HISTORY_PATH, rhythmGameHistory);
+                    hasAny = true;
+                }
+                if (hasAny) {
+                    JOptionPane.showMessageDialog(null, "Selected data is saved", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    quitAfterSaving();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No data to save", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    mainMenu();
+                }
+            }
+        });
+    }
+
+    // EFFECTS: prints event log and exits after save.
+    private void quitAfterSaving() {
+        ConsolePrinter printer = new ConsolePrinter();
+        printer.printLog(EventLog.getInstance());
+        System.exit(1);
     }
 
     // MODIFIES: this
@@ -264,15 +337,20 @@ public class MainMenuGUI extends JFrame {
     private void reloadHelper() {
         frame = new JFrame("Reload Helper");
         JButton reloadSongList = new JButton("Reload your saved song list");
+        JButton reloadRhythmHistory = new JButton("Reload your saved rhythm history");
         JButton menu = new JButton("Return to the menu");
         buttons.put("reloadSongList", reloadSongList);
+        buttons.put("reloadRhythmHistory", reloadRhythmHistory);
         buttons.put("menu", menu);
         frame.setLayout(new BorderLayout());
         frame.getContentPane().setBackground(PAGE_BG);
         JPanel content = createCardPanel();
         stylePrimaryButton(reloadSongList, UIManager.getIcon("FileChooser.upFolderIcon"));
+        stylePrimaryButton(reloadRhythmHistory, UIManager.getIcon("FileView.fileIcon"));
         stylePrimaryButton(menu, UIManager.getIcon("FileChooser.homeFolderIcon"));
         content.add(reloadSongList);
+        content.add(Box.createVerticalStrut(10));
+        content.add(reloadRhythmHistory);
         content.add(Box.createVerticalStrut(10));
         content.add(menu);
         frame.add(content, BorderLayout.CENTER);
@@ -288,8 +366,42 @@ public class MainMenuGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SongList mySongList = persistentGUI.reloadFromFile(SONG_LIST_PATH);
-                persistentGUI.askMerge(mySongList);
-                JOptionPane.showMessageDialog(null, "Reload is done", "Message", JOptionPane.INFORMATION_MESSAGE);
+                if (mySongList != null) {
+                    persistentGUI.askMerge(mySongList);
+                    JOptionPane.showMessageDialog(null, "Song list reload is done", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to reload song list", "Message",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+                frame.dispose();
+                mainMenu();
+            }
+        });
+        buttons.get("reloadRhythmHistory").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RhythmGameHistory loadedHistory = persistentGUI.reloadRhythmHistoryFromFile(RHYTHM_HISTORY_PATH);
+                if (loadedHistory != null) {
+                    if (rhythmGameHistory.getSize() > 0) {
+                        int choice = JOptionPane.showConfirmDialog(null,
+                                "Current rhythm history is not empty. Merge old and current history?",
+                                "Reload Options", JOptionPane.YES_NO_OPTION);
+                        if (choice == JOptionPane.YES_OPTION) {
+                            rhythmGameHistory.merge(loadedHistory);
+                        } else {
+                            rhythmGameHistory.reset();
+                            rhythmGameHistory.merge(loadedHistory);
+                        }
+                    } else {
+                        rhythmGameHistory.merge(loadedHistory);
+                    }
+                    JOptionPane.showMessageDialog(null, "Rhythm history reload is done", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to reload rhythm history", "Message",
+                            JOptionPane.WARNING_MESSAGE);
+                }
                 frame.dispose();
                 mainMenu();
             }

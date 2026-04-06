@@ -245,6 +245,11 @@ public class MusicLibraryGUI extends JFrame {
         menu();
     }
 
+    // EFFECTS: returns the built-in music library.
+    public SongList getMusicLibrary() {
+        return musicLibrary;
+    }
+
     // MODIFIES: this
     // EFFECTS: generating JButton for song and return the JButton
     private void generateJButtonForSongs(SongList musicLibrary) {

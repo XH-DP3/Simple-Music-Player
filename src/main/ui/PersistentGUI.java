@@ -4,14 +4,19 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import model.RhythmGameHistory;
 import model.SongList;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import persistence.RhythmHistoryReader;
+import persistence.RhythmHistoryWriter;
 
 // Represent a class that deals with saving and reloading the lists
 public class PersistentGUI {
     private JsonWriter writer;
     private JsonReader reader;
+    private RhythmHistoryWriter rhythmWriter;
+    private RhythmHistoryReader rhythmReader;
     private SongListGUI songListGUI;
 
     // MODIFIES: this
@@ -40,6 +45,32 @@ public class PersistentGUI {
         try {
             SongList mySongList = reader.read();
             return mySongList;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: writes rhythm game history to filepath.
+    public void writeRhythmHistoryToFile(String filePath, RhythmGameHistory history) {
+        rhythmWriter = new RhythmHistoryWriter(filePath);
+        try {
+            rhythmWriter.open();
+            rhythmWriter.write(history);
+            rhythmWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: reloads rhythm game history from filepath.
+    public RhythmGameHistory reloadRhythmHistoryFromFile(String filePath) {
+        rhythmReader = new RhythmHistoryReader(filePath);
+        try {
+            RhythmGameHistory history = rhythmReader.read();
+            return history;
         } catch (IOException e) {
             e.printStackTrace();
         }
