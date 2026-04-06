@@ -80,3 +80,44 @@ Everybody Hurts is deleted from song list.
 Suppose I have more time to work on the project. In that case, I will make SongListGUI to be a subclass of MusicLibraryGUI to avoid duplicate methods because these two classes have very similar behaviours, which include adding songs, playing songs, and potentially some other functionalities. So, having this structure will follow a good design principle. In addition to this, I will make a separate class that deals with layout and format when displaying songs in each panel. For now, this is done by some methods implemented in each class with similar code, so extracting them and putting them into a separate class could make each class more cohesive.
 
 On the other hand, I may probably make some methods to be static to make sure they can be invoked outside of the class and without instantiating an instance of that type. For example, the main menu panel will be used in almost every page to let the user return to the very beginning page. But because of this, I have a reference of MainMenuGUI in some classes, which increases the level of coupling. When I was working on the project, I also realized that, a small adjustment of a class can make other classes that are associated with it or depend on it to crash. So, the current implementation may not be the best choice. Although I have already separated a single classes into several classes to maintain cohesion, I still need to find a way to minimize coupling.# CPSC-210-Software-Construction-Project
+
+## Updates After Course Deadline
+
+This repository continued to receive improvements after the original CPSC 210 submission deadline.
+
+- Added a dedicated rhythm game page (`RhythmGameGUI` + `RhythmGamePanel`) without breaking core music-player features.
+- Added difficulty options with different lane counts and note density tuning.
+- Added keyboard pause/resume support using `SPACE`.
+- Added visual key-press feedback (lane flash effect).
+- Added rhythm-game session history persistence (`save`/`reload`) and historical highest-score display.
+- Improved UI layout and status messaging across the menu and game pages.
+
+## How To Run This Program
+
+### Prerequisites
+
+- Java 11 or newer (`javac` and `java` available in terminal).
+
+### Compile
+
+From the project root, run:
+
+```bash
+javac -cp lib/json-20240303.jar -d bin $(find src/main -name '*.java')
+```
+
+### Start the App
+
+From the project root, run:
+
+```bash
+java -cp bin:lib/json-20240303.jar ui.Main
+```
+
+Notes:
+- On Windows Command Prompt, replace `:` with `;` in the classpath:
+
+```bat
+java -cp bin;lib/json-20240303.jar ui.Main
+```
+- Audio/image assets are loaded from the `data/` folder, so run commands from the project root directory.
