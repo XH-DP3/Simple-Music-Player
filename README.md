@@ -1,4 +1,4 @@
-# Interactive-Music-Player-with-Rhythm-Game
+# Interactive Music Player with Rhythm Game
 
 ## Feel the music, Feel the Rhythm
 
